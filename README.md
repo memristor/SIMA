@@ -1,6 +1,6 @@
-                                                                                    #############################################################
-                                                                                    Prototip za kontrolu dynamixel motora preko esp-now protokola
-                                                                                    #############################################################
+#############################################################
+Prototip za kontrolu dynamixel motora preko esp-now protokola
+#############################################################
 
 
 Jedan esp salje paket sa kontrolnim signalom <<esp-host.ino>> na zadate mac adrese.
