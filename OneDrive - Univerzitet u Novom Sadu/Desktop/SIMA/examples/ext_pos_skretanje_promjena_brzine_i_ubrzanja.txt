@@ -1,0 +1,133 @@
+#include <Dynamixel2Arduino.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+#define TX_PIN 17
+#define RX_PIN 16
+#define TX_ENABLE 4
+#define DXL_SERIAL Serial2
+
+#define ID1 1
+#define ID2 2
+#define BAUD_RATE 115200
+#define PROTOCOL 2.0
+
+Dynamixel2Arduino dxl(DXL_SERIAL, TX_ENABLE);
+using namespace ControlTableItem;
+
+int32_t pos1, pos2;
+int32_t velocity1 = 0;
+int32_t velocity2 = 0;
+
+void setupMotors() {
+  DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
+
+  dxl.begin(BAUD_RATE);
+  dxl.setPortProtocolVersion(PROTOCOL);
+
+  if (dxl.ping(ID1) && dxl.ping(ID2)) {
+    Serial.println("Successfully connected to motors !");
+  } else {
+    Serial.println("Failed to connect to motors");
+    while (1)
+      ;
+  }
+
+  dxl.torqueOff(ID1);
+  dxl.setOperatingMode(ID1, OP_EXTENDED_POSITION);
+  dxl.torqueOn(ID1);
+
+  dxl.torqueOff(ID2);
+  dxl.setOperatingMode(ID2, OP_EXTENDED_POSITION);
+  dxl.torqueOn(ID2);
+
+  Serial.println("Motors set to Position Control Mode.");
+}
+
+void resetMotors() {
+
+  Serial.println("Positions before reset: ");
+  Serial.print(dxl.getPresentPosition(ID1));
+  Serial.print(" ");
+  Serial.println(dxl.getPresentPosition(ID2));
+
+  dxl.writeControlTableItem(GOAL_POSITION, ID1, 0);
+  dxl.writeControlTableItem(GOAL_POSITION, ID2, 0);
+
+  while (abs(dxl.getPresentPosition(ID1)) > 20 || abs(dxl.getPresentPosition(ID2)) > 20) {
+    delay(10);
+  }
+
+  Serial.println("Positions after reset: ");
+  Serial.print(dxl.getPresentPosition(ID1));
+  Serial.print(" ");
+  Serial.println(dxl.getPresentPosition(ID2));
+
+  Serial.println("Motors reset successfully!");
+  delay(1000);
+}
+
+void changeVelocity(int32_t vel1, int32_t vel2) {
+  dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, vel1);
+  dxl.writeControlTableItem(PROFILE_VELOCITY, ID2, vel2);
+  Serial.print("Velocity changed to: ");
+  Serial.print(vel1);
+  Serial.print(" on ID1 and ");
+  Serial.print(vel2);
+  Serial.println(" on ID2.");
+}
+
+void changeAcceleration(int32_t acc1, int32_t acc2) {
+  dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, acc1);
+  dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, acc2);
+  Serial.print("Acceleration changed to: ");
+  Serial.print(acc1);
+  Serial.print(" on ID1 and ");
+  Serial.print(acc2);
+  Serial.println(" on ID2.");
+}
+
+void moveMotors(int32_t offset1, int32_t offset2) {
+  int32_t start1 = dxl.getPresentPosition(ID1);
+  int32_t start2 = dxl.getPresentPosition(ID2);
+
+  int32_t target1 = start1 + offset1;
+  int32_t target2 = start2 - offset2;
+
+  dxl.writeControlTableItem(GOAL_POSITION, ID1, target1);
+  dxl.writeControlTableItem(GOAL_POSITION, ID2, target2);
+
+  Serial.println("Moving motors...");
+
+  while (abs(dxl.getPresentPosition(ID1) - target1) > 20 || abs(dxl.getPresentPosition(ID2) - target2) > 20) {
+    delay(10);
+  }
+
+  Serial.println("Motors moved successfully!");
+}
+
+void setup() {
+
+  Serial.begin(115200);
+  Serial.println("Initializing...");
+
+  //setup i reset
+  setupMotors();
+  resetMotors();
+
+  //jako malo ubrzanje da smanjimo proklizavanje na pocetku
+  changeAcceleration(20, 20);
+  changeVelocity(240, 160);  //skretanje na desnu stranu (grubo oko 90 stepeni)
+  moveMotors(8000, 6000);    //gruba procjena da nadoknadimo razliciti predjeni put
+
+  changeVelocity(230, 230);  //pravolinijsko kretanje
+  moveMotors(8190, 8190);    //2*4095 - 2 obima tocka
+
+  delay(5000);
+
+  resetMotors();
+
+  Serial.println("Zavrseno kretanje!");
+}
+void loop() {
+}

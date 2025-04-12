@@ -1,0 +1,70 @@
+#include <Dynamixel2Arduino.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+#define TX_PIN 17
+#define RX_PIN 16
+#define TX_ENABLE 4
+#define DXL_SERIAL Serial2
+
+#define ID1 1
+#define ID2 2
+#define BAUD_RATE 115200
+#define PROTOCOL 2.0
+
+Dynamixel2Arduino dxl(DXL_SERIAL, TX_ENABLE);
+using namespace ControlTableItem;
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Initializing...");
+
+  DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
+  dxl.begin(BAUD_RATE);
+  dxl.setPortProtocolVersion(PROTOCOL);
+
+  //pingujemo motore i ukljucimo extended position mode
+  if (dxl.ping(ID1) && dxl.ping(ID2)) {
+    Serial.println("Motors are successfully connected!");
+  } else {
+    Serial.println("Failed to connect to motors. Check wiring and power supply.");
+    while (1)
+      ;
+  }
+
+  dxl.torqueOff(ID1);
+  dxl.setOperatingMode(ID1, OP_EXTENDED_POSITION);
+  dxl.torqueOn(ID1);
+
+  dxl.torqueOff(ID2);
+  dxl.setOperatingMode(ID2, OP_EXTENDED_POSITION);
+  dxl.torqueOn(ID2);
+
+  //resetujemo motore na poziciju 0!
+  Serial.println("Resetting motors to position 0...");
+  dxl.setGoalPosition(ID1, 0);
+  dxl.setGoalPosition(ID2, 0);
+
+  //debug
+  Serial.println("Positions before the reset: ");
+  Serial.print("ID1: ");
+  Serial.print(dxl.getPresentPosition(ID1));
+  Serial.print(" | ID2: ");
+  Serial.println(dxl.getPresentPosition(ID2));
+
+  while (abs(dxl.getPresentPosition(ID1)) > 10 || abs(dxl.getPresentPosition(ID2)) > 10) {
+    delay(10);
+  }
+
+  Serial.println("Motors successfully reset to 0.");
+
+  delay(1000);
+
+  //pravolinijsko kretanje
+  Serial.println("Moving motors to ±12000...");
+  dxl.setGoalPosition(ID1, 12000);
+  dxl.setGoalPosition(ID2, -12000);
+}
+
+void loop() {
+}
