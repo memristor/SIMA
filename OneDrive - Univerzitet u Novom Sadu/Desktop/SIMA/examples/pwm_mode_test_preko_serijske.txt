@@ -1,0 +1,83 @@
+#include <Dynamixel2Arduino.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+// ESP32 setup
+#define DXL_SERIAL Serial2
+#define TX_PIN 17
+#define RX_PIN 16
+#define TX_ENABLE 4
+
+// Dynamixel setup
+#define ID1 1  //lijevi motor
+#define ID2 2  //desni motor
+#define BAUD_RATE 115200
+#define PROTOCOL 2.0
+
+Dynamixel2Arduino dxl(DXL_SERIAL, TX_ENABLE);
+using namespace ControlTableItem;
+
+//pocetno stanje
+bool motors_running = false;
+bool prev_motors_running = false;
+
+void setup() {
+  //debag
+  Serial.begin(115200);
+  Serial.println("Initializing...");
+
+  DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
+
+  dxl.begin(BAUD_RATE);
+  dxl.setPortProtocolVersion(PROTOCOL);
+
+  //pingujemo motore i ukljucimo pwm mod
+  if (dxl.ping(ID1) && dxl.ping(ID2)) {
+    Serial.println("Motors are successfully connected!");
+
+    dxl.torqueOff(ID1);
+    dxl.setOperatingMode(ID1, OP_PWM);
+    dxl.torqueOn(ID1);
+
+    dxl.torqueOff(ID2);
+    dxl.setOperatingMode(ID2, OP_PWM);
+    dxl.torqueOn(ID2);
+
+    Serial.println("Motors set to PWM Control Mode.");
+  } else {
+    Serial.println("Failed to connect to motors. Check wiring and power supply.");
+    while (1)
+      ;
+  }
+}
+
+void loop() {
+  //provjerimo da li smo poslali start/stop
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+
+    if (command.equalsIgnoreCase("start")) {
+      motors_running = true;
+    } else if (command.equalsIgnoreCase("stop")) {
+      motors_running = false;
+    } else {
+      Serial.println("Invalid command. Use 'start' or 'stop'.");
+    }
+  }
+
+  if (motors_running != prev_motors_running) {
+    if (motors_running) {
+      dxl.writeControlTableItem(GOAL_PWM, ID1, 850);
+      dxl.writeControlTableItem(GOAL_PWM, ID2, -400);
+      Serial.println("Motors are running in PWM mode...");
+    } else {
+      dxl.writeControlTableItem(GOAL_PWM, ID1, 0);
+      dxl.writeControlTableItem(GOAL_PWM, ID2, 0);
+      Serial.println("Motors are stopped.");
+    }
+    prev_motors_running = motors_running;
+  }
+
+  delay(500);
+}

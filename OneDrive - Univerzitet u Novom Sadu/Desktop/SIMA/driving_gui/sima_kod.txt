@@ -1,0 +1,239 @@
+#include <WiFi.h>
+#include <WebServer.h>
+#include <Dynamixel2Arduino.h>
+
+// Motor setup
+#define DXL_SERIAL Serial2
+#define TX_PIN 17
+#define RX_PIN 16
+#define TX_EN_PIN 4
+#define ID1 1
+#define ID2 2
+#define BAUD_RATE 115200
+#define PROTOCOL 2.0
+
+Dynamixel2Arduino dxl(DXL_SERIAL, TX_EN_PIN);
+using namespace ControlTableItem;
+
+int32_t pos1, pos2;
+int32_t vel1 = 230;
+int32_t vel2 = 230;
+int32_t acc1 = 20;
+int32_t acc2 = 20;
+
+const char* ssid = "RobotControl";      // AP SSID
+const char* password = "12345678";      // AP password
+
+WebServer server(80);
+
+void initServer(){
+   // Start Access Point
+  WiFi.softAP(ssid, password);
+  delay(100);
+  Serial.print("AP IP address: ");
+  Serial.println(WiFi.softAPIP());
+
+  // Set up web server
+  server.on("/cmd", HTTP_GET, handleCommand);
+  server.begin();
+  Serial.println("Web server started.");
+}
+
+void initMotors(){
+   DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
+
+    dxl.begin(BAUD_RATE);
+    dxl.setPortProtocolVersion(PROTOCOL);
+
+    if (dxl.ping(ID1) && dxl.ping(ID2)) {
+        Serial.println("Successfully connected to motors!");
+    } else {
+        Serial.println("Failed to connect to motors!");
+        while (1);
+    }
+
+    dxl.torqueOff(ID1);
+    dxl.setOperatingMode(ID1, OP_EXTENDED_POSITION);
+    dxl.torqueOn(ID1);
+
+    dxl.torqueOff(ID2);
+    dxl.setOperatingMode(ID2, OP_EXTENDED_POSITION);
+    dxl.torqueOn(ID2);
+
+    Serial.println("Motors set to Extended Position Control Mode.");
+    Serial.print("Initial velocity is: "); 
+    Serial.print(vel1);
+    Serial.print(" ");
+    Serial.println(vel2);
+    Serial.print("Initial acceleration is: ");
+    Serial.print(acc1);
+    Serial.print(" ");
+    Serial.println(acc2);
+
+    dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, acc1); 
+    dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, acc2); 
+    dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, vel1); 
+    dxl.writeControlTableItem(PROFILE_VELOCITY, ID2, vel2); 
+}
+
+void moveMotors(int32_t offset1, int32_t offset2) {
+  int32_t start1 = dxl.getPresentPosition(ID1);
+  int32_t start2 = dxl.getPresentPosition(ID2);
+
+  int32_t target1 = start1 + offset1;
+  int32_t target2 = start2 - offset2;
+
+  dxl.writeControlTableItem(GOAL_POSITION, ID1, target1);
+  dxl.writeControlTableItem(GOAL_POSITION, ID2, target2);
+
+  Serial.println("Moving motors...");
+}
+
+
+void handleCommand() {
+  if (server.hasArg("val")) {
+    String cmd = server.arg("val");
+    Serial.printf("Received command: %s\n", cmd.c_str());
+
+    char c = cmd.charAt(0);
+    handleMotorCommand(c);
+
+    server.send(200, "text/plain", "OK");
+  } else {
+    server.send(400, "text/plain", "Missing command");
+  }
+}
+
+void handleMotorCommand(char cmd) {
+  switch (cmd) {
+    case 'w':
+      Serial.println("Move Forward");
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 20);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, 20);  // Set velocity to 0 to stop movement
+      moveMotors(100000, 100000);
+      break;
+    case 'a':
+      Serial.println("Turn Left");
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 20);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, 20);  // Set velocity to 0 to stop movement
+      moveMotors(0, 10000);
+      break;
+    case 's':
+      Serial.println("Move Backward");
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 20);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, 20);  // Set velocity to 0 to stop movement
+      moveMotors(-100000, -100000);
+      break;
+    case 'd':
+      Serial.println("Turn Right");
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 20);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, 20);  // Set velocity to 0 to stop movement
+      moveMotors(10000, 0);
+      break;
+    case 'x':
+      Serial.println("Stopping motors!");
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 30000);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, 30000);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(GOAL_POSITION, ID1, dxl.getPresentPosition(ID1));  // Keep current position, effectively stopping it
+      dxl.writeControlTableItem(GOAL_POSITION, ID2, dxl.getPresentPosition(ID2));  // Keep current position for both motors
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, 0);  // Set velocity to 0 to stop movement
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID2, 0);  // Set velocity to 0 to stop movement
+      Serial.println("Motors stopped.");
+      break;
+    case 'r':
+    Serial.println("Reset");
+    Serial.println("Positions before reset: ");
+    Serial.print(dxl.getPresentPosition(ID1));
+    Serial.print(" ");
+    Serial.println(dxl.getPresentPosition(ID2));
+
+    dxl.writeControlTableItem(GOAL_POSITION, ID1, 0);
+    dxl.writeControlTableItem(GOAL_POSITION, ID2, 0);
+
+    while(abs(dxl.getPresentPosition(ID1)) > 20 || abs(dxl.getPresentPosition(ID2)) > 20){
+        delay(10);
+    }
+
+    Serial.println("Positions after reset: ");
+    Serial.print(dxl.getPresentPosition(ID1));
+    Serial.print(" ");
+    Serial.println(dxl.getPresentPosition(ID2));
+
+    Serial.println("Motors reset successfully!");
+      break;
+
+    case 'u':
+      Serial.println("Increase Velocity");
+      if((vel1 <= 280)&&(vel2 <= 280)){
+        vel1 += 10;
+        vel2 += 10;
+      }
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, vel1); 
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID2, vel2); 
+      Serial.print("Velocity changed to: ");
+      Serial.print(vel1);
+      Serial.print(" on ID1 and ");
+      Serial.print(vel2);
+      Serial.println(" on ID2.");
+      break;
+    case 'j':
+      Serial.println("Decrease Velocity");
+      if((vel1 >= 10)&&(vel2 >= 10)){
+        vel1 -= 10;
+        vel2 -= 10;
+      }
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, vel1); 
+      dxl.writeControlTableItem(PROFILE_VELOCITY, ID2, vel2); 
+      Serial.print("Velocity changed to: ");
+      Serial.print(vel1);
+      Serial.print(" on ID1 and ");
+      Serial.print(vel2);
+      Serial.println(" on ID2.");
+      break;
+    case 'i':
+      Serial.println("Increase Acceleration");
+      if((acc1 <= 36000)&&(acc2 <= 36000)){
+        acc1 += 10;
+        acc2 += 10;
+      }
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, acc1); 
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, acc2); 
+      Serial.print("Acceleration changed to: ");
+      Serial.print(acc1);
+      Serial.print(" on ID1 and ");
+      Serial.print(acc2);
+      Serial.println(" on ID2.");
+      break;
+    case 'k':
+      Serial.println("Decrease Acceleration");
+      if((acc1 >= 10)&&(acc2 >= 10)){
+        acc1 -= 10;
+        acc2 -= 10;
+      }
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, acc1); 
+      dxl.writeControlTableItem(PROFILE_ACCELERATION, ID2, acc2); 
+      Serial.print("Acceleration changed to: ");
+      Serial.print(acc1);
+      Serial.print(" on ID1 and ");
+      Serial.print(acc2);
+      Serial.println(" on ID2.");
+      break;
+    default:
+      Serial.println("Unknown Command");
+      break;
+  }
+
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  initServer();
+
+  initMotors();
+ 
+}
+
+void loop() {
+  server.handleClient();
+}

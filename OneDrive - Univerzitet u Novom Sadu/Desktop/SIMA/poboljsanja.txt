@@ -1,0 +1,61 @@
+---------------------------------------------------------------------
+KORISTITI SYNC WRITE ZA OPTIMALNU KONTROLU VISE MOTORA!
+
+4-byte values -> deklarisemo kao int32_t !!!! 
+
+primjer za 2 motora i poziciju:
+
+uint8_t ids[2] = {ID1, ID2};
+int32_t positions[2] = {target1, target2};
+
+//syncWrite salje GOAL_POSITION na oba motora u istom trenutku
+dxl.syncWrite(GOAL_POSITION, ids, 2, positions);
+
+primjer za 3 motora i poziciju:
+
+uint8_t ids[3] = {1, 2, 3};
+int32_t positions[3] = {10000, 20000, 30000};
+dxl.syncWrite(GOAL_POSITION, ids, 3, positions);
+
+primjer za ubrzanje:
+
+uint8_t ids[2] = {ID1, ID2};
+int32_t accs[2] = {acc1, acc2};
+dxl.syncWrite(PROFILE_ACCELERATION, ids, 2, accs);
+
+primjer za brzinu:
+
+uint8_t ids[2] = {ID1, ID2};
+int32_t vels[2] = {vel1, vel2};
+dxl.syncWrite(PROFILE_VELOCITY, ids, 2, vels);
+
+
+---------------------------------------------------------------------
+
+
+obratiti paznju na sledece:
+
+/* !!!!!!PROFILE_ACCELERATION ≤ 0.5 × PROFILE_VELOCITY!!!!!!!
+npr 
+PROFILE_VELOCITY = 200
+// → PROFILE_ACCELERATION max = 100
+
+---------------------------------------------------------------------
+
+NISMO TESTIRALI ALI POSTOJI I TIME BASED KONTROLA UBRZANJA I BRZINE:
+
+dxl.writeControlTableItem(DRIVE_MODE, ID1, 0); // Time-based
+dxl.writeControlTableItem(PROFILE_VELOCITY, ID1, 120);
+dxl.writeControlTableItem(PROFILE_ACCELERATION, ID1, 60);  // Acceleration time = 60ms
+
+ovdje vrijednost od 1 inkrement predstavlja 1ms!
+
+---------------------------------------------------------------------
+
+testirati funkcionalnosti
+
+provjeriti opseg za velocity 0-256 ili 0-32767?
+
+dodati q i e za krivolinijsko kretanje na gui, imati graficki prikaz trenutne brzine i ubrzanja radi lakseg snalazenja
+
+*/

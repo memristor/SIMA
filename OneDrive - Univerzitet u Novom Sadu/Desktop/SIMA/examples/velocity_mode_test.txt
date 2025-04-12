@@ -1,0 +1,57 @@
+#include <Dynamixel2Arduino.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+#define TX_PIN 17
+#define RX_PIN 16
+#define TX_ENABLE 4
+#define DXL_SERIAL Serial2
+
+#define ID1 1
+#define ID2 2
+#define BAUD_RATE 115200
+#define PROTOCOL 2.0
+
+Dynamixel2Arduino dxl(DXL_SERIAL, TX_ENABLE);
+using namespace ControlTableItem;
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Initializing...");
+
+  DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
+
+  dxl.begin(BAUD_RATE);
+  dxl.setPortProtocolVersion(PROTOCOL);
+
+  if (dxl.ping(ID1) && dxl.ping(ID2)) {
+    Serial.println("Motors are successfully connected!");
+  } else {
+    Serial.println("Failed to connect to motors. Check wiring and power supply.");
+    while (1)
+      ;
+  }
+
+  dxl.torqueOff(ID1);
+  dxl.setOperatingMode(ID1, OP_VELOCITY);
+  dxl.torqueOn(ID1);
+
+  dxl.torqueOff(ID2);
+  dxl.setOperatingMode(ID2, OP_VELOCITY);
+  dxl.torqueOn(ID2);
+
+  Serial.println("Motors set to Velocity Control Mode.");
+}
+
+void loop() {
+
+  delay(2000);
+
+  dxl.setGoalVelocity(ID1, 250);
+  dxl.setGoalVelocity(ID2, -250);
+
+  delay(4000);
+
+  dxl.setGoalVelocity(ID1, 0);
+  dxl.setGoalVelocity(ID2, 0);
+}
