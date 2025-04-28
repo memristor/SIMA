@@ -1,21 +1,38 @@
-*********Prototype for Controlling Dynamixel Motors via ESP-NOW*********
+# Sima Code Examples
 
-This project demonstrates how to control Dynamixel motors using the ESP-NOW protocol.
+This repository contains example codes for controlling **Sima**.
 
--Overview:
+The examples demonstrate how to use Dynamixel features and how to adapt them for Sima’s movement and control logic.
 
-	-A master ESP32 (esp-host.ino) sends a control signal packet to predefined MAC addresses.
-    
-	-Each ESP32 slave device receives the packet and starts executing the motor control logic.
-    
-	-It is necessary to retrieve and register the MAC address of each ESP32 individually before communication.
+<img src="https://raw.githubusercontent.com/prokelj/images/main/sima.jpg" alt="Sima" width="380"/>
 
--Setup:
+---
 
-	1.Obtain the MAC address of each ESP32 device.
-    
-	2.Configure the master device (esp-host.ino) with the correct MAC addresses of the slave devices.
-    
-	3.Flash the code to the master and slave ESP32 boards.
-	Upon receiving the signal, the slave devices will initiate motor control operations.
-    
+## Folder Structure
+
+### `examples/`
+
+This folder contains various example codes for controlling Sima.  
+These examples showcase the **basic functionalities** of Dynamixel motors and demonstrate how to **configure them specifically for our Sima**.
+
+### `esp_now_enable_signal/`
+
+This folder contains code that sends an **enable signal** to the Sima (the funcionality for multiple SIMAs isn't implemented yet) using the **ESP-NOW protocol**.
+
+Use this to wirelessly trigger Sima’s movement start from a separate ESP32 board.
+
+### `driving_gui/`
+
+This is a **web-based application** for general testing of Sima’s functionality.  
+It allows control of Sima using a **laptop and keyboard**, independently of any pre-programmed behavior.
+
+> This GUI does not follow a predefined path—it is meant for **manual testing**.
+
+---
+
+## Requirements
+
+- SIMA
+- Arduino IDE or VS Code for flashing examples 
+
+---
