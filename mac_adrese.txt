@@ -1,5 +1,11 @@
 host: 
 48:E7:29:AF:A8:4D
 
-slave:
+slave1:
+08:D1:F9:35:A9:78
+
+slave2:
 C4:DD:57:CA:AF:F1
+
+uint8_t peer1Address[] = {0x08, 0xD1, 0xF9, 0x35, 0xA9, 0x78};
+uint8_t peer2Address[] = {0xC4, 0xDD, 0x57, 0xCA, 0xAF, 0xF0};

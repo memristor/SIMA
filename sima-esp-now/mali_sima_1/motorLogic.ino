@@ -100,15 +100,55 @@ void moveMotorsMM(double cm1, double cm2) {
     return;
   }
 
-  Serial.println("Waiting for motors to reach target...");
-  while (true) {
-    if (!readPosition(pos)) {
-      Serial.println("Failed to read current positions during wait.");
-      continue;
-    }
+  bool stanje = false;
+  int32_t remaining[2];
+  int32_t velocity[2];
 
-    if (abs(pos[0] - goal_positions[0]) <= 15 && abs(pos[1] - goal_positions[1]) <= 15) {
-      break;
+  Serial.println("Waiting for motors to reach target...");
+  while (abs(pos[0] - goal_positions[0]) > 15 || abs(pos[1] - goal_positions[1]) > 15){
+    
+     readPosition(pos);
+
+    if(readSensors() && !stanje){
+      velocity[0] = 32000;
+      velocity[1] = 32000;
+
+      for(int i = 0; i < 10; ++i){
+        velocity[0] -= 3200;
+        velocity[1] -= 3200;
+        changeVelocity(velocity[0], velocity[1]);
+        delay(4);
+      }
+
+      readPosition(pos);
+
+      remaining[0] = goal_positions[0] - pos[0];
+      remaining[1] = goal_positions[1] - pos[1];
+
+      Serial.print("REMAINING POSITION: ");
+      Serial.println(remaining[0]);
+      Serial.print(remaining[1]);
+
+       sw_data_pos[0].goal_position = pos[0];
+       sw_data_pos[1].goal_position = pos[1];
+
+       sw_infos_pos.is_info_changed = true;
+
+       dxl.syncWrite(&sw_infos_pos);
+
+       stanje = true;
+    }else if(!readSensors() && stanje){
+      changeVelocity(MAX_VELOCITY, MAX_VELOCITY);
+
+       sw_data_pos[0].goal_position = pos[0] + remaining[0];
+       sw_data_pos[1].goal_position = pos[1] + remaining[1];
+
+
+       sw_infos_pos.is_info_changed = true;
+
+       dxl.syncWrite(&sw_infos_pos);
+
+       stanje = false;
     }
 
     delay(10);

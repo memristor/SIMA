@@ -8,6 +8,7 @@
 #define BAUD_RATE 115200
 #define PROTOCOL 2.0
 
+
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
 using namespace ControlTableItem;
 
