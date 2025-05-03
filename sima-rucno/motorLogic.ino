@@ -81,7 +81,7 @@ void moveMotorsMM(double cm1, double cm2) {
 
   Serial.print("\t Pos before moving: "); Serial.print(pos[0]); Serial.print(" "); Serial.println(pos[1]);
 
-  int32_t goal_positions[2] = { pos[0] + offset1, pos[1] - offset2 };
+  int32_t goal_positions[2] = { pos[0] - offset1, pos[1] + offset2 };
 
   sw_data_pos[0].goal_position = goal_positions[0];
   sw_data_pos[1].goal_position = goal_positions[1];
@@ -105,7 +105,7 @@ void moveMotorsMM(double cm1, double cm2) {
   int32_t velocity[2];
 
   Serial.println("Waiting for motors to reach target...");
-  while ((abs(pos[0] - goal_positions[0]) > 15 && abs(pos[1] - goal_positions[1]) > 15)) {
+  while (abs(pos[0] - goal_positions[0]) > 15 || abs(pos[1] - goal_positions[1]) > 15){
     
      readPosition(pos);
 

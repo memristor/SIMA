@@ -5,8 +5,7 @@
 
 typedef enum { blue,
                yellow } Strategy;
-
-Strategy strategy = blue;
+Strategy strategy = yellow;
 
 #define MAX_VELOCITY 32767
 
@@ -21,20 +20,17 @@ void setup() {
   setupSync();
   sensorInit();
   setupServo();
+  resetMotors();
 
-  changeAcceleration(50,50);
+  changeVelocity(MAX_VELOCITY, MAX_VELOCITY);
+  changeAcceleration(50, 50);
 
+  moveMotorsMM(350, 350);
+  rotateMotors(-35);
+  moveMotorsMM(850, 850);
+  rotateMotors(-55);
+  moveMotorsMM(-400, -400);
 }
 
 void loop() {
-  
-    resetMotors();
-
-    delay(3000);
-
-    moveMotorsMM(1300, 1300);
-
-    Serial.println("Zavrseno kretanje!");
-
-  }
 }
