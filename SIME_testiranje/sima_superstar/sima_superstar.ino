@@ -1,18 +1,18 @@
 #include <Dynamixel2Arduino.h>
-#include <esp_now.h>
-#include <WiFi.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <cmath>
 
-typedef enum { blue,
-               yellow } Strategy;
-Strategy strategy = yellow;
+#include "init.h"
+#include "motors.h"
+#include "esp-now.h"
+#include "cincLogic.h"
+#include "strategy.h"
+#include "servo.h"
+#include "sensor.h"
 
 bool motors_enabled = false;
 bool motors_reset = false;
-
-#define MAX_VELOCITY 32767
 
 void setup() {
   Serial.begin(115200);
@@ -21,17 +21,28 @@ void setup() {
 
   Serial.println("Initializing...");
 
-  initializeESPNOW();
+  initStrat();
+  setupESPNOW();
   setupMotors();
   setupSync();
   sensorInit();
   setupServo();
 
-  changeVelocity(MAX_VELOCITY, MAX_VELOCITY);
-  changeAcceleration(50, 50);
+  initTimer();
 }
 
 void loop() {
+
+  checkLED();
+
+  if (!prev_cinc && cinc) {
+    Serial.println("CINC pulled: Sending ENABLE signal!");
+    sendData.enable = true;
+    sendToAll();
+    motors_enabled = true;
+  }
+  prev_cinc = cinc;
+
   if (motors_reset) {
     Serial.println("Resetting motors...");
     resetMotors();
@@ -41,12 +52,11 @@ void loop() {
   if (motors_enabled) {
     Serial.println("Motors enabled: moving...");
 
-    moveMotorsMM(350, 350);
-    rotateMotors(-35);
-     moveMotorsMM(850, 850);
-     rotateMotors(-55);
-     moveMotorsMM(-400, -400);
+    callTimer();
 
+    checkStrat();
+
+    Serial.println("Zavrseno kretanje!");
     motors_enabled = false;
   }
 }

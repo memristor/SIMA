@@ -1,3 +1,6 @@
+extern volatile bool endFlag;
+
+
 void setupMotors() {
   DXL_SERIAL.begin(BAUD_RATE, SERIAL_8N1, RX_PIN, TX_PIN);
   dxl.begin(BAUD_RATE);
@@ -6,7 +9,7 @@ void setupMotors() {
   int br = 0;
 
   for (int i = 0; i < DXL_ID_CNT; i++) {
-    if(dxl.ping(DXL_ID_LIST[i])){
+    if (dxl.ping(DXL_ID_LIST[i])) {
       br++;
     }
   }
@@ -14,7 +17,8 @@ void setupMotors() {
     Serial.println("Successfully connected to motors!");
   } else {
     Serial.println("Failed to connect to motors");
-    while (1);
+    while (1)
+      ;
   }
 
   dxl.torqueOff(ID1);
@@ -34,11 +38,13 @@ void changeVelocity(int32_t vel1, int32_t vel2) {
 
   sw_infos_vel.is_info_changed = true;
 
-   if(dxl.syncWrite(&sw_infos_vel) == true){
+  if (dxl.syncWrite(&sw_infos_vel) == true) {
     Serial.println("[SyncWrite] Success");
-    for(int i = 0; i<sw_infos_vel.xel_count; i++){
-      Serial.print("  ID: ");Serial.println(sw_infos_vel.p_xels[i].id);
-      Serial.print("\t Goal Velocity: ");Serial.println(sw_data_vel[i].goal_velocity);
+    for (int i = 0; i < sw_infos_vel.xel_count; i++) {
+      Serial.print("  ID: ");
+      Serial.println(sw_infos_vel.p_xels[i].id);
+      Serial.print("\t Goal Velocity: ");
+      Serial.println(sw_data_vel[i].goal_velocity);
     }
   } else {
     Serial.print("[SyncWrite] Fail, Lib error code: ");
@@ -50,13 +56,15 @@ void changeAcceleration(int32_t acc1, int32_t acc2) {
   sw_data_acc[0].goal_acceleration = acc1;
   sw_data_acc[1].goal_acceleration = acc2;
 
-   sw_infos_acc.is_info_changed = true;
+  sw_infos_acc.is_info_changed = true;
 
-   if(dxl.syncWrite(&sw_infos_acc) == true){
+  if (dxl.syncWrite(&sw_infos_acc) == true) {
     Serial.println("[SyncWrite] Success");
-    for(int i = 0; i<sw_infos_acc.xel_count; i++){
-      Serial.print("  ID: ");Serial.println(sw_infos_acc.p_xels[i].id);
-      Serial.print("\t Goal Acceleration: ");Serial.println(sw_data_acc[i].goal_acceleration);
+    for (int i = 0; i < sw_infos_acc.xel_count; i++) {
+      Serial.print("  ID: ");
+      Serial.println(sw_infos_acc.p_xels[i].id);
+      Serial.print("\t Goal Acceleration: ");
+      Serial.println(sw_data_acc[i].goal_acceleration);
     }
   } else {
     Serial.print("[SyncWrite] Fail, Lib error code: ");
@@ -65,6 +73,12 @@ void changeAcceleration(int32_t acc1, int32_t acc2) {
 }
 
 void moveMotorsMM(double cm1, double cm2) {
+
+   if (endFlag) {
+      dxl.torqueOff(ID1);
+      dxl.torqueOff(ID2);
+      return;
+    }
 
   const double TICKS_PER_MM = 4095.0 / 265.485;
 
@@ -79,7 +93,10 @@ void moveMotorsMM(double cm1, double cm2) {
     return;
   }
 
-  Serial.print("\t Pos before moving: "); Serial.print(pos[0]); Serial.print(" "); Serial.println(pos[1]);
+  Serial.print("\t Pos before moving: ");
+  Serial.print(pos[0]);
+  Serial.print(" ");
+  Serial.println(pos[1]);
 
   int32_t goal_positions[2] = { pos[0] + offset1, pos[1] - offset2 };
 
@@ -91,8 +108,10 @@ void moveMotorsMM(double cm1, double cm2) {
   if (dxl.syncWrite(&sw_infos_pos)) {
     Serial.println("[SyncWrite - Position] Success");
     for (int i = 0; i < sw_infos_pos.xel_count; i++) {
-      Serial.print("  ID: "); Serial.println(sw_infos_pos.p_xels[i].id);
-      Serial.print("\t Goal Position: "); Serial.println(sw_data_pos[i].goal_position);
+      Serial.print("  ID: ");
+      Serial.println(sw_infos_pos.p_xels[i].id);
+      Serial.print("\t Goal Position: ");
+      Serial.println(sw_data_pos[i].goal_position);
     }
   } else {
     Serial.print("[SyncWrite - Position] Fail, Lib error code: ");
@@ -105,21 +124,30 @@ void moveMotorsMM(double cm1, double cm2) {
   int32_t velocity[2];
 
   Serial.println("Waiting for motors to reach target...");
-  while ((abs(pos[0] - goal_positions[0]) > 15 && abs(pos[1] - goal_positions[1]) > 15)) {
-    
-     readPosition(pos);
+  while (abs(pos[0] - goal_positions[0]) > 20 || abs(pos[1] - goal_positions[1]) > 20) {
 
-    if(readSensors() && !stanje){
-      velocity[0] = 32000;
-      velocity[1] = 32000;
+    readPosition(pos);
 
-      for(int i = 0; i < 10; ++i){
-        velocity[0] -= 3200;
-        velocity[1] -= 3200;
-        changeVelocity(velocity[0], velocity[1]);
-        delay(4);
-      }
+    if (endFlag) {
+      changeVelocity(0, 0);
+      readPosition(pos);
+      sw_data_pos[0].goal_position = pos[0];
+      sw_data_pos[1].goal_position = pos[1];
 
+      sw_infos_pos.is_info_changed = true;
+      dxl.syncWrite(&sw_infos_pos);
+
+      dxl.torqueOff(ID1);
+      dxl.torqueOff(ID2);
+
+      Serial.println("Timer expired or stop condition met, stopping motors...");
+
+      break;
+    }
+
+    if (readSensors() && !stanje) {
+      changeAcceleration(MAX, MAX);
+      changeVelocity(0, 0);
       readPosition(pos);
 
       remaining[0] = goal_positions[0] - pos[0];
@@ -129,38 +157,46 @@ void moveMotorsMM(double cm1, double cm2) {
       Serial.println(remaining[0]);
       Serial.print(remaining[1]);
 
-       sw_data_pos[0].goal_position = pos[0];
-       sw_data_pos[1].goal_position = pos[1];
+      sw_data_pos[0].goal_position = pos[0];
+      sw_data_pos[1].goal_position = pos[1];
 
-       sw_infos_pos.is_info_changed = true;
+      sw_infos_pos.is_info_changed = true;
 
-       dxl.syncWrite(&sw_infos_pos);
+      dxl.syncWrite(&sw_infos_pos);
 
-       stanje = true;
-    }else if(!readSensors() && stanje){
-      changeVelocity(MAX_VELOCITY, MAX_VELOCITY);
+      stanje = true;
+    } else if (!readSensors() && stanje) {
+      changeAcceleration(MIN, MIN);
+      changeVelocity(MAX, MAX);
 
-       sw_data_pos[0].goal_position = pos[0] + remaining[0];
-       sw_data_pos[1].goal_position = pos[1] + remaining[1];
+      sw_data_pos[0].goal_position = pos[0] + remaining[0];
+      sw_data_pos[1].goal_position = pos[1] + remaining[1];
 
+      sw_infos_pos.is_info_changed = true;
 
-       sw_infos_pos.is_info_changed = true;
+      dxl.syncWrite(&sw_infos_pos);
 
-       dxl.syncWrite(&sw_infos_pos);
-
-       stanje = false;
+      stanje = false;
     }
 
     delay(10);
   }
 
-  Serial.print("\t Pos after moving: "); Serial.print(pos[0]); Serial.print(" "); Serial.println(pos[1]);
-  Serial.println("Motors moved successfully!");
+  if (endFlag) {
+    Serial.println("Motors stopped due to timer or stop condition.");
+  } else {
+    Serial.print("\t Pos after moving: ");
+    Serial.print(pos[0]);
+    Serial.print(" ");
+    Serial.println(pos[1]);
+    Serial.println("Motors moved successfully!");
+  }
 }
 
+
 void rotateMotors(double angle_deg) {
-  const double WHEEL_DISTANCE_MM = 95; //wheel sep                 
-  const double TICKS_PER_MM = 4095.0 / 265.485;             
+  const double WHEEL_DISTANCE_MM = 95;  //wheel sep
+  const double TICKS_PER_MM = 4095.0 / 265.485;
 
   double arc_mm = (PI * WHEEL_DISTANCE_MM * angle_deg) / 360.0;
 
@@ -176,7 +212,7 @@ void resetMotors() {
     return;
   }
 
-  int32_t goal_positions[2] = {0, 0};
+  int32_t goal_positions[2] = { 0, 0 };
 
   sw_data_pos[0].goal_position = goal_positions[0];
   sw_data_pos[1].goal_position = goal_positions[1];
@@ -187,8 +223,10 @@ void resetMotors() {
   if (dxl.syncWrite(&sw_infos_pos)) {
     Serial.println("[SyncWrite - Position] Success");
     for (int i = 0; i < sw_infos_pos.xel_count; i++) {
-      Serial.print("  ID: "); Serial.println(sw_infos_pos.p_xels[i].id);
-      Serial.print("\t Goal Position: "); Serial.println(sw_data_pos[i].goal_position);
+      Serial.print("  ID: ");
+      Serial.println(sw_infos_pos.p_xels[i].id);
+      Serial.print("\t Goal Position: ");
+      Serial.println(sw_data_pos[i].goal_position);
     }
   } else {
     Serial.print("[SyncWrite - Position] Fail, Lib error code: ");
@@ -203,7 +241,7 @@ void resetMotors() {
       continue;
     }
 
-    if (abs(pos[0] - goal_positions[0]) <= 15 && abs(pos[1] - goal_positions[1]) <= 15) {
+    if (abs(pos[0] - goal_positions[0]) <= 20 && abs(pos[1] - goal_positions[1]) <= 20) {
       break;
     }
 
@@ -212,6 +250,3 @@ void resetMotors() {
 
   Serial.println("Motors reset successfully!");
 }
-
-
-
