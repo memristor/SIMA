@@ -23,11 +23,11 @@ void SIMA_SUPERSTAR_YELLOW() {
   moveMotorsMM(-120, -120);
   checkEndFlag();
   delay(100);
-  moveMotorsMM(150, 150);
+  moveMotorsMM(270, 270);
   checkEndFlag();
   changeVelocity(60, 60);
   checkEndFlag();
-  moveMotorsMM(205, 205);
+  moveMotorsMM(78, 78);
 
   while (true) {
     moveMotors();
@@ -45,11 +45,11 @@ void SIMA_SUPERSTAR_BLUE() {
   moveMotorsMM(-120, -120);
   checkEndFlag();
   delay(100);
-  moveMotorsMM(150, 150);
+  moveMotorsMM(270, 270);
   checkEndFlag();
   changeVelocity(60, 60);
   checkEndFlag();
-  moveMotorsMM(205, 205);
+  moveMotorsMM(78, 78);
 
   while (true) {
     moveMotors();

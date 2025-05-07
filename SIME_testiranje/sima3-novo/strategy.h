@@ -1,7 +1,7 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 
-#define MAX 32767
+#define MAX 1023
 #define MIN 150
 
 extern volatile bool endFlag;

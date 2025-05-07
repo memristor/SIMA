@@ -13,21 +13,22 @@ void checkEndFlag() {
 }
 
 void SIMA3_YELLOW() {
-  changeAcceleration(MIN, MIN);
-  changeVelocity(MAX, MAX);
+  changeAcceleration(100, 100);
+  changeVelocity(1000, 1000);
 
-  delay(200);
-  rotateMotors(60);
+  moveMotorsMM(500, 500);
   checkEndFlag();
-  moveMotorsMM(650, 650);
+  moveMotorsMM(70, -70);
   checkEndFlag();
-  rotateMotors(-60);
+  moveMotorsMM(500, 500);
   checkEndFlag();
-  moveMotorsMM(1480, 1480);
+  moveMotorsMM(-70, 70);
   checkEndFlag();
-  rotateMotors(-90);
+  moveMotorsMM(1150, 1150);
   checkEndFlag();
-  moveMotorsMM(100, 100);
+  moveMotorsMM(-85, 85);
+  checkEndFlag();
+  moveMotorsMM(200, 200);
 
   while (true) {
     moveMotors();
@@ -35,22 +36,22 @@ void SIMA3_YELLOW() {
 }
 
 void SIMA3_BLUE() {
-  changeAcceleration(MIN, MIN);
-  changeVelocity(MAX, MAX);
+  changeAcceleration(100, 100);
+  changeVelocity(1000, 1000);
 
-  delay(200);
-  rotateMotors(-60);
+  moveMotorsMM(500, 500);
   checkEndFlag();
-  moveMotorsMM(650, 650);
+  moveMotorsMM(-70, 70);
   checkEndFlag();
-  rotateMotors(60);
+  moveMotorsMM(500, 500);
   checkEndFlag();
-  moveMotorsMM(1480, 1480);
+  moveMotorsMM(70, -70);
   checkEndFlag();
-  rotateMotors(90);
+  moveMotorsMM(1150, 1150);
   checkEndFlag();
-  moveMotorsMM(100, 100);
-
+  moveMotorsMM(85, -85);
+  checkEndFlag();
+  moveMotorsMM(200, 200);
 
   while (true) {
     moveMotors();

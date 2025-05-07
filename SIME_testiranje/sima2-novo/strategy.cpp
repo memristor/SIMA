@@ -14,17 +14,18 @@ void checkEndFlag() {
 
 void SIMA2_YELLOW() {
   changeAcceleration(MIN, MIN);
-  changeVelocity(MAX, MAX);
 
-  moveMotorsMM(150, 150);
+  delay(500);
+
+  changeVelocity(260, 220);
+  moveMotorsMM(410, 350);
+  changeVelocity(260, 240);
   checkEndFlag();
-  rotateMotors(35);
+  moveMotorsMM(220, 200);
+  changeVelocity(500, 500);
+  moveMotorsMM(-37, 37);
   checkEndFlag();
-  moveMotorsMM(720, 720);
-  checkEndFlag();
-  rotateMotors(-35);
-  checkEndFlag();
-  moveMotorsMM(550, 550);
+  moveMotorsMM(750, 750);
 
   while (true) {
     moveMotors();
@@ -33,17 +34,17 @@ void SIMA2_YELLOW() {
 
 void SIMA2_BLUE() {
   changeAcceleration(MIN, MIN);
-  changeVelocity(MAX, MAX);
+  changeVelocity(220, 260);
 
-  moveMotorsMM(150, 150);
+  delay(500);
+  moveMotorsMM(350, 410);
+  changeVelocity(240, 260);
   checkEndFlag();
-  rotateMotors(-35);
+  moveMotorsMM(200, 220);
+  changeVelocity(500, 500);
+  moveMotorsMM(37, -37);
   checkEndFlag();
-  moveMotorsMM(720, 720);
-  checkEndFlag();
-  rotateMotors(35);
-  checkEndFlag();
-  moveMotorsMM(550, 550);
+  moveMotorsMM(750, 750);
 
   while (true) {
     moveMotors();
