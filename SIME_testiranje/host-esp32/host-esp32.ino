@@ -2,13 +2,11 @@
 #include <WiFi.h>
 
 // MAC addresses of the receiver ESP32 boards
-uint8_t peer1Address[] = { 0x78, 0x42, 0x1C, 0x67, 0x95, 0x10 };
-uint8_t peer2Address[] = { 0xC4, 0xDD, 0x57, 0xCA, 0xAF, 0xF0 };
-uint8_t peer3Address[] = { 0x3C, 0x8A, 0x1F, 0x9D, 0x31, 0xC4 };
-uint8_t peer4Address[] = { 0x78, 0x42, 0x1C, 0x68, 0x3D, 0x08 };
+uint8_t peer1Address[] = {0x78, 0x42, 0x1C, 0x67, 0x95, 0x10};  // Superstar
+uint8_t peer2Address[] = {0xC4, 0xDD, 0x57, 0xCA, 0xAF, 0xF0};  // Sima1
+uint8_t peer3Address[] = {0x3C, 0x8A, 0x1F, 0x9D, 0x31, 0xC4};  // Sima2
+uint8_t peer4Address[] = {0x78, 0x42, 0x1C, 0x68, 0x3D, 0x08};  // Sima3
 
-
-// Updated struct to include both enable and reset
 typedef struct struct_message {
   bool enable;
   bool reset;
@@ -47,7 +45,7 @@ void sendToAll() {
   esp_now_send(peer1Address, (uint8_t *)&sendData, sizeof(sendData));
   esp_now_send(peer2Address, (uint8_t *)&sendData, sizeof(sendData));
   esp_now_send(peer3Address, (uint8_t *)&sendData, sizeof(sendData));
-  esp_now_send(peer4Address, (uint8_t *)&sendData, sizeof(sendData));
+  esp_now_send(peer4Address, (uint8_t *)&sendData, sizeof(sendData));  
 }
 
 void setup() {
@@ -61,11 +59,10 @@ void setup() {
 
   esp_now_register_send_cb(onSent);
 
-  // Add both peers
   addPeer(peer1Address);
   addPeer(peer2Address);
   addPeer(peer3Address);
-  addPeer(peer4Address);
+  addPeer(peer4Address); 
 
   Serial.println("Type 'start' or 'reset' to send a command.");
 }

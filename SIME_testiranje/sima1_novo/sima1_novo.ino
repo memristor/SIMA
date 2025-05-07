@@ -35,10 +35,8 @@ void loop() {
 
   checkLED();
 
-  if (!prev_cinc && cinc) {
+  if (!prev_cinc && !cinc) {
     Serial.println("CINC pulled: Sending ENABLE signal!");
-    sendData.enable = true;
-    sendToAll();
     motors_enabled = true;
   }
   prev_cinc = cinc;

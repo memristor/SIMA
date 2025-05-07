@@ -1,12 +1,12 @@
-#include <ESP32Servo.h>
+#include "servo.h"
 
 Servo myservo;
 
-void setupServo(){
+void setupServo() {
   myservo.attach(27);
 }
 
-void moveMotors(){
+void moveMotors() {
   myservo.write(30);
   delay(1000);
   myservo.write(150);
