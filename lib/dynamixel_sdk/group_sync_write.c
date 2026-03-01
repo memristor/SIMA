@@ -268,7 +268,7 @@ void groupSyncWriteClearParam(int group_num)
 
   groupData[group_num].data_list_length = 0;
 
-  groupData[group_num].is_param_changed = False;  // Ovde o starom stoji true
+  groupData[group_num].is_param_changed = False;  // Ovde u starom stoji true
 }
 
 void groupSyncWriteTxPacket(int group_num)

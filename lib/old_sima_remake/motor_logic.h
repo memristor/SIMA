@@ -416,6 +416,7 @@ void setupMotors()
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
             motor_count++;
     }
+    printf("Motor count: %d\n", motor_count);
     if (motor_count == DXL_ID_CNT)
         printf("Motor connection established!\n");
     else
@@ -431,6 +432,14 @@ void setupMotors()
     set_operating_mode(dxl_port_num, MOTOR_2_ID, OP_EXTENDED_POSITION);
     
     printf("Motors set to Extended Position Control Mode.\n");
-}
 
-//void set_goal_velocity(int port_num, uint8_t id, ) // Staro changeVelocity
+    // Set goal position to 0 for motor 1
+    //set_control_table(dxl_port_num, MOTOR_1_ID, GOAL_POS_ADDR, 0, 4, 0);
+    //vTaskDelay(20 / portTICK_PERIOD_MS);
+
+    // Set goal position to 0 for motor 2
+    //set_control_table(dxl_port_num, MOTOR_2_ID, GOAL_POS_ADDR, 0, 4, 0);
+    //vTaskDelay(20 / portTICK_PERIOD_MS);
+
+    //printf("Motors set to 0 goal position.\n");
+}
