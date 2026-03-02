@@ -4,7 +4,7 @@
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "motor_logic.h"
-
+#include "init.h"
 
 void app_main() 
 {
@@ -24,17 +24,13 @@ void app_main()
 
     printf("Address of port in packetData: %p\n", packetData);*/
 
+    setup_sync();
     setupMotors();
-    int group_num = setup_sync_read(PRESENT_POS_ADDR, 4);
-    int sw_group_nums[3] = {0, 0, 0};
-    setup_sw(sw_group_nums);
 
-    printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
-    printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
+    //printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
+    //printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
 
-    uint32_t present_pos_read[2] = {0, 0};
-
-    if (!read_position(group_num, present_pos_read))
+    if (!read_position(group_num_sr, present_pos_read))
     {
         printf("Position read failed.\n");
     }
@@ -45,33 +41,33 @@ void app_main()
         printf("Motor 2 position: %ld\n", present_pos_read[1]);
     }
 
-    
+    printf("GROUP NUM SR: %d\n", group_num_sr);    
+    printf("ACC: %d\n", sw_group_nums[0]);
+    printf("VEL: %d\n", sw_group_nums[1]);
+    printf("POS: %d\n", sw_group_nums[2]);
 
-    profile_vel_sw[0] = 120;
-    profile_vel_sw[1] = 120;
+    profile_vel_sw[0] = 240;
+    profile_vel_sw[1] = 240;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-
-    printf("Profile velocity 1: %ld\n", read_profile_velocity(dxl_port_num, MOTOR_1_ID));
-    printf("Profile velocity 2: %ld\n", read_profile_velocity(dxl_port_num, MOTOR_2_ID));
-
-    
-    profile_acc_sw[0] = 240;
-    profile_acc_sw[1] = 240;
+   
+    profile_acc_sw[0] = 32767;
+    profile_acc_sw[1] = 32767;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
-    printf("Profile acceleration 1: %ld\n", read_profile_acceleration(dxl_port_num, MOTOR_1_ID));
-    printf("Profile acceleration 2: %ld\n", read_profile_acceleration(dxl_port_num, MOTOR_2_ID));
+    move_motors_mm(sw_group_nums[2], 1000, 1000);
 
-    goal_pos_sw[0] = -100000;
-    goal_pos_sw[1] =  100000;
+    //vTaskDelay(10000 / portTICK_PERIOD_MS);
+
+    rotate_motors(90);
+
+    move_motors_mm(sw_group_nums[2], 200, 200);
+
+    //goal_pos_sw[0] = -100000;
+    //goal_pos_sw[1] =  100000;
     
-    sync_write_gposition(sw_group_nums[2], goal_pos_sw);
-
-    printf("Goal position 1: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_1_ID));
-    printf("Goal position 2: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_2_ID));
-
+    //sync_write_gposition(sw_group_nums[2], goal_pos_sw);
     
     //set_operating_mode(dxl_port_num, MOTOR_1_ID, OP_POSITION);
 
@@ -86,7 +82,7 @@ void app_main()
         //printf("Samo da ne puca\n");
         
 
-        if (!read_position(group_num, present_pos_read))
+        if (!read_position(group_num_sr, present_pos_read))
         {
             printf("Position read failed.\n");
         }

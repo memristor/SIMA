@@ -217,7 +217,7 @@ uint8_t groupSyncWriteChangeParam(int group_num, uint8_t id, uint32_t data, uint
   }
     
 
-  printf("Data_length: %d\n", groupData[group_num].data_length);
+  //printf("Data_length: %d\n", groupData[group_num].data_length);
   if (data_pos + input_length > groupData[group_num].data_length)
   {
     printf("Fail 2\n");
