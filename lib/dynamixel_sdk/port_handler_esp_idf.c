@@ -275,7 +275,7 @@ int readPortEspIdf(int port_num, uint8_t *packet, int length)
     ESP_LOGI(TAG, " readPortEspIdf: uart_read_bytes returned error, clamped to 0");
     read_len = 0;
   } else {
-    ESP_LOG_BUFFER_HEX(TAG, packet, read_len < 16 ? read_len : 16);
+    //ESP_LOG_BUFFER_HEX(TAG, packet, read_len < 16 ? read_len : 16);
   }
 
 //  uint64_t t_end = esp_timer_get_time();

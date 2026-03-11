@@ -4,7 +4,15 @@
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "motor_logic.h"
+#include "timer.h"  // TREBA DA SE TESTIRA
+#include "cinc_logic.h" // TREBA DA SE TESTIRA
+#include "strategy.h"   // TREBA DA SE TESTIRA
+#include "sensor.h"
+#include "servo.h"
 #include "init.h"
+
+bool motors_enabled = false;
+bool motors_reset = false;
 
 void app_main() 
 {
@@ -18,14 +26,18 @@ void app_main()
     }
     else
     {
-        printf("Baudrate read failed!\n");
+        printf("Baudrate read failed!\n");  
     }
     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
     printf("Address of port in packetData: %p\n", packetData);*/
 
+    init_strat();
     setup_sync();
     setupMotors();
+    sensor_init();
+    setup_servo();
+    init_timer();
 
     //printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
     //printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
@@ -46,15 +58,19 @@ void app_main()
     printf("VEL: %d\n", sw_group_nums[1]);
     printf("POS: %d\n", sw_group_nums[2]);
 
-    profile_vel_sw[0] = 240;
-    profile_vel_sw[1] = 240;
+    profile_vel_sw[0] = MAX_VEL_ACC;
+    profile_vel_sw[1] = MAX_VEL_ACC;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
    
-    profile_acc_sw[0] = 32767;
-    profile_acc_sw[1] = 32767;
+    profile_acc_sw[0] = MAX_VEL_ACC;
+    profile_acc_sw[1] = MAX_VEL_ACC;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+
+    //start_timer();
+
+    //vTaskDelay(10000 / portTICK_PERIOD_MS);
 
     move_motors_mm(sw_group_nums[2], 1000, 1000);
 
@@ -63,6 +79,21 @@ void app_main()
     rotate_motors(90);
 
     move_motors_mm(sw_group_nums[2], 200, 200);
+
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+
+    //profile_vel_sw[0] = MAX_VEL_ACC;
+    //profile_vel_sw[1] = MAX_VEL_ACC;
+
+    //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    start_timer();
+    create_stop_motors_end_task();
+    create_check_sensors_task();
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], 10000, 10000);
 
     //goal_pos_sw[0] = -100000;
     //goal_pos_sw[1] =  100000;
@@ -79,9 +110,28 @@ void app_main()
 
     while (1)
     {
-        //printf("Samo da ne puca\n");
-        
+        printf("Samo da ne puca\n");
 
+        //vTaskDelay(5000 / portTICK_PERIOD_MS);
+
+        check_led();
+
+        if (!prev_cinc && !cinc)
+        {
+            printf("CINC pulled: Sending ENABLE signal");
+            motors_enabled = true;
+        }
+        prev_cinc = cinc;
+
+        if (motors_enabled == true)
+        {
+            // Ovde bi se pozvao tajmer i proverila strategija po
+            // kojoj bi se SIMA kretala
+            motors_enabled = false;
+        }
+        
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        /*
         if (!read_position(group_num_sr, present_pos_read))
         {
             printf("Position read failed.\n");
@@ -94,7 +144,7 @@ void app_main()
         }
 
         vTaskDelay(5000 / portTICK_PERIOD_MS);
-        /*broadcastPing(dxl_port_num, DXL_PROTOCOL);
+        broadcastPing(dxl_port_num, DXL_PROTOCOL);
 
         printf("Broadcast ping test: \n");
         if (packetData[dxl_port_num].communication_result != COMM_SUCCESS)

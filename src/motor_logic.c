@@ -81,6 +81,7 @@ void sync_write_acceleration(int group_num, uint32_t *acceleration_data)
     else
     {
         printf("Profile acceleration set fail.\n");
+        printf("Error code: %d", packetData[dxl_port_num].communication_result);
     }
 }
 
@@ -236,21 +237,23 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
     {
         if (!read_position(group_num_sr, present_pos_read))
             continue;
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(20 / portTICK_PERIOD_MS);
     } while (abs(present_pos_read[0] - goal_pos_sw[0]) > 20 || abs(present_pos_read[1] - goal_pos_sw[1]) > 20);
+
+    // Deo koji proverava kraj kretanja stavljen unutar stop_motors_end task-a u strategy.h
       
 }
 
 void rotate_motors(double angle_deg)
 {
-    const double WHEEL_DISTANCE_MM = 100;
+    const double wheel_radius = 100;
 
-    double arc_mm = (M_PI * WHEEL_DISTANCE_MM * angle_deg) / 360.0;
+    double arc_mm = wheel_radius * (angle_deg * M_PI / 360);
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }
 
-void reset_motors(int vel_group_sw_num, int gpos_group_sw_num,int pos_group_sr_num)
+void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_num)
 {
     profile_vel_sw[0] = -MAX_VEL;
     profile_vel_sw[1] =  MAX_VEL;
@@ -258,7 +261,7 @@ void reset_motors(int vel_group_sw_num, int gpos_group_sw_num,int pos_group_sr_n
     sync_write_velocity(vel_group_sw_num, profile_vel_sw);
 
     goal_pos_sw[0] = 0;
-    goal_pos_sw[0] = 0;
+    goal_pos_sw[1] = 0;
 
     sync_write_gposition(gpos_group_sw_num, goal_pos_sw);
 

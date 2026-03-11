@@ -23,7 +23,7 @@
 #define GOAL_POS_ADDR 116
 #define PRESENT_POS_ADDR 132
 
-#define MAX_VEL 32768
+#define MAX_VEL 32767
 
 #define TAG_INIT "UART_INIT"
 
