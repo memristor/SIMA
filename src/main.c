@@ -4,9 +4,9 @@
 #include "freertos/task.h"
 #include "driver/uart.h"
 #include "motor_logic.h"
-#include "timer.h"  // TREBA DA SE TESTIRA
-#include "cinc_logic.h" // TREBA DA SE TESTIRA
-#include "strategy.h"   // TREBA DA SE TESTIRA
+#include "timer.h" 
+#include "cinc_logic.h"
+#include "strategy.h" 
 #include "sensor.h"
 #include "servo.h"
 #include "init.h"
@@ -58,13 +58,13 @@ void app_main()
     printf("VEL: %d\n", sw_group_nums[1]);
     printf("POS: %d\n", sw_group_nums[2]);
 
-    profile_vel_sw[0] = MAX_VEL_ACC;
-    profile_vel_sw[1] = MAX_VEL_ACC;
+    profile_vel_sw[0] = 240;
+    profile_vel_sw[1] = 240;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
    
-    profile_acc_sw[0] = MAX_VEL_ACC;
-    profile_acc_sw[1] = MAX_VEL_ACC;
+    profile_acc_sw[0] = 500;
+    profile_acc_sw[1] = 500;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
@@ -76,9 +76,9 @@ void app_main()
 
     //vTaskDelay(10000 / portTICK_PERIOD_MS);
 
-    rotate_motors(90);
+    //rotate_motors(90);
 
-    move_motors_mm(sw_group_nums[2], 200, 200);
+    //move_motors_mm(sw_group_nums[2], 200, 200);
 
     vTaskDelay(5000 / portTICK_PERIOD_MS);
 

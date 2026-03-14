@@ -12,7 +12,10 @@ void setupMotors()
     {
         ping(dxl_port_num, DXL_PROTOCOL, DXL_ID_LIST[i]);
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
+        {
             motor_count++;
+            printf("Motor id: %d", DXL_ID_LIST[i]);
+        }
     }
     printf("Motor count: %d\n", motor_count);
     if (motor_count == DXL_ID_CNT)

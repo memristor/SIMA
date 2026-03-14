@@ -1,9 +1,14 @@
 #include "sensor.h"
 #include "cinc_logic.h"
+#include "motor_logic.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 TaskHandle_t check_sensors_handle;
+
+uint32_t remaining[2] = {0, 0};
+
+bool state = false;
 
 void check_sensors_task(void *pvParams)
 {
@@ -17,13 +22,35 @@ void check_sensors_task(void *pvParams)
 
         if (end_flag == true)
             vTaskDelete(NULL);
-        else if (read_sensors() == true)
+        else if (read_sensors() == true && state == false)
         {
-            printf("Sensors high!\n");          // Nemam senzore
-        }
+            sync_write_gposition(sw_group_nums[2], present_pos_read);
 
+            profile_vel_sw[0] = 0;
+            profile_vel_sw[1] = 0;
+
+            sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+            remaining[0] = goal_pos_sw[0] - present_pos_read[0];
+            remaining[1] = goal_pos_sw[1] - present_pos_read[1];
+
+            state = true;
+        }
+        else if (read_sensors() == false && state == true)
+        {
+            profile_vel_sw[0] = 240;
+            profile_vel_sw[1] = 240;
+
+            sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+            goal_pos_sw[0] = remaining[0] + present_pos_read[0];
+            goal_pos_sw[1] = remaining[1] + present_pos_read[1];
+
+            sync_write_gposition(sw_group_nums[2], goal_pos_sw);
+
+            state = false;
+        }
     }
-    
 }
 
 void sensor_init()

@@ -6,7 +6,7 @@
 
 #define TIMER_TAG "TIMER.H"
 
-#define RUN_TIME_uS 4000000
+#define RUN_TIME_uS 10000000
 
 volatile bool end_flag = false;
 
