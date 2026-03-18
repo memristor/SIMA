@@ -24,10 +24,11 @@ void check_sensors_task(void *pvParams)
             vTaskDelete(NULL);
         else if (read_sensors() == true && state == false)
         {
+            //read_position(group_num_sr, present_pos_read)
             sync_write_gposition(sw_group_nums[2], present_pos_read);
 
-            profile_vel_sw[0] = 0;
-            profile_vel_sw[1] = 0;
+            profile_vel_sw[0] = MIN_VEL_ACC;
+            profile_vel_sw[1] = MIN_VEL_ACC;
 
             sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
@@ -38,8 +39,8 @@ void check_sensors_task(void *pvParams)
         }
         else if (read_sensors() == false && state == true)
         {
-            profile_vel_sw[0] = 240;
-            profile_vel_sw[1] = 240;
+            profile_vel_sw[0] = MAX_VEL_ACC;
+            profile_vel_sw[1] = MAX_VEL_ACC;
 
             sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 

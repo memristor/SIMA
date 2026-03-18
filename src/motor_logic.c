@@ -4,6 +4,13 @@
 #include "freertos/task.h"
 #include "math.h"
 
+#define WHEEL_DIAMETER_1_mm 88
+#define WHEEL_DIAMETER_2_mm 88
+#define WHEELS_DISTANCE_mm 97.25
+
+const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
+const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
+
 void setupMotors() 
 {
     uint8_t motor_count = 0;
@@ -14,7 +21,7 @@ void setupMotors()
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
         {
             motor_count++;
-            printf("Motor id: %d", DXL_ID_LIST[i]);
+            //printf("Motor id: %d", DXL_ID_LIST[i]);
         }
     }
     printf("Motor count: %d\n", motor_count);
@@ -221,10 +228,8 @@ void set_goal_velocity(int port_num, uint8_t id, uint32_t goal_velocity)
 
 void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 {
-    const double TICKS_PER_MM = 4095.0 / 265.485;
-
-    uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM);
-    uint32_t offset2 = (uint32_t) (mm2 * TICKS_PER_MM);
+    uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM_1);
+    uint32_t offset2 = (uint32_t) (mm2 * TICKS_PER_MM_2);
 
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
@@ -249,9 +254,7 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
 void rotate_motors(double angle_deg)
 {
-    const double wheel_radius = 100;
-
-    double arc_mm = wheel_radius * (angle_deg * M_PI / 360);
+    double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }

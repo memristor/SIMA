@@ -6,16 +6,28 @@
 
 #define TIMER_TAG "TIMER.H"
 
-#define RUN_TIME_uS 10000000
+#define DISABLED_TIME_uS 5000000
+#define RUN_TIME_uS 14500000
 
 volatile bool end_flag = false;
+bool start_flag = false;
+bool timer_on = false;
 
 esp_timer_handle_t end_timer;
 
 void IRAM_ATTR timer_call(void *arg)
 {
-    printf("Endflag = true\n");
-    end_flag = true;                                
+    if (start_flag == false)
+    {
+        printf("Endflag timer started\n");
+        esp_timer_start_once(end_timer, RUN_TIME_uS);
+        start_flag = true;
+    }
+    else
+    {
+        printf("Endflag = true\n");
+        end_flag = true; 
+    }                               
 }
 
 void init_timer()
@@ -38,12 +50,15 @@ void init_timer()
 
 void start_timer()
 {
-    if (esp_timer_start_once(end_timer, RUN_TIME_uS) != ESP_OK)
+    if (esp_timer_start_once(end_timer, DISABLED_TIME_uS) != ESP_OK)
     {
         ESP_LOGI(TIMER_TAG, "Timer start fail.\n");
     } 
     else
+    {
         ESP_LOGI(TIMER_TAG, "Timer start success.\n");
+        timer_on = true;
+    }
 }
 
 #endif

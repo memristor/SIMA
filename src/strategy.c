@@ -43,6 +43,7 @@ void stop_motors_end(void *pvParams)
         xTaskDelayUntil(&xLastWakeTime, xFreq);
         //printf("STOP TASK\n");
 
+        //vTaskDelay(10 / portTICK_PERIOD_MS);
         if (end_flag == true)
         {
             shut_motors_off();
@@ -103,29 +104,30 @@ void create_stop_motors_end_task()
 
 void shut_motors_off()
 {
-    //read_position(group_num_sr, present_pos_read);
     goal_pos_sw[0] = present_pos_read[0];
     goal_pos_sw[1] = present_pos_read[1];
-    sync_write_gposition(sw_group_nums[2], present_pos_read);
+    sync_write_gposition(sw_group_nums[2], goal_pos_sw);
 
-    profile_vel_sw[0] = 0;
-    profile_vel_sw[1] = 0;
-    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    //profile_vel_sw[0] = MIN_VEL_ACC;
+    //profile_vel_sw[1] = MIN_VEL_ACC;
+    //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    set_torque_enable(dxl_port_num, MOTOR_1_ID, false);
+    //set_torque_enable(dxl_port_num, MOTOR_1_ID, false);
     //vTaskDelay(10 / portTICK_PERIOD_MS);
-    set_torque_enable(dxl_port_num, MOTOR_2_ID, false);
+    //set_torque_enable(dxl_port_num, MOTOR_2_ID, false);
     //vTaskDelay(10 / portTICK_PERIOD_MS);
 }
 
 void SIMA_N_YELLOW()
 {
-
+    move_motors_mm(sw_group_nums[2], 1000, 1000);
+    rotate_motors(90);
+    move_motors_mm(sw_group_nums[2], 10000, 10000);
 }
 
 void SIMA_N_BLUE()
 {
-
+    move_motors_mm(sw_group_nums[2], 10000, 10000);
 }
 
 

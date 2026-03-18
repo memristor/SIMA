@@ -22,6 +22,8 @@ void init_strat()
     gpio_input_enable(CINC_PIN);
     gpio_input_enable(STRAT_PIN);
 
+    //gpio_pullup_dis(CINC_PIN);
+
     gpio_set_pull_mode(STRAT_PIN, GPIO_PULLUP_ONLY);
     gpio_pullup_en(STRAT_PIN);
 }
