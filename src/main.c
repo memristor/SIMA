@@ -62,11 +62,13 @@ void app_main()
     profile_vel_sw[1] = MAX_VEL_ACC;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC);
    
     profile_acc_sw[0] = MAX_VEL_ACC/5;
     profile_acc_sw[1] = MAX_VEL_ACC/5;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/5);
 
     //start_timer();
 

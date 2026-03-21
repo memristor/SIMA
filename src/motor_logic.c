@@ -15,7 +15,7 @@ void setupMotors()
 {
     uint8_t motor_count = 0;
 
-    for (uint8_t i = 0; i < DXL_ID_CNT; i++)
+    for (uint8_t i = 0; i < DXL_ID_CNT + 1; i++)
     {
         ping(dxl_port_num, DXL_PROTOCOL, DXL_ID_LIST[i]);
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
@@ -38,6 +38,9 @@ void setupMotors()
 
     // Set operating mode for motor 2
     set_operating_mode(dxl_port_num, MOTOR_2_ID, OP_EXTENDED_POSITION);
+
+    // Pumpa 3 mod
+    set_operating_mode(dxl_port_num, MOTOR_3_ID, OP_POSITION);
     
     printf("Motors set to Extended Position Control Mode.\n");
 }
@@ -224,6 +227,21 @@ void set_goal_velocity(int port_num, uint8_t id, uint32_t goal_velocity)
     {
         printf("Goal velocity set successful, value set: %ld\n", goal_velocity);
     }
+}
+
+void set_profile_velocity(int port_num, uint8_t id, uint32_t profile_velocity)
+{
+    set_control_table(port_num, id, PROFILE_VEL_ADDR, profile_velocity, 4, 0);
+}
+
+void set_profile_acceleration(int port_num, uint8_t id, uint32_t profile_acc)
+{
+    set_control_table(port_num, id, PROFILE_ACC_ADDR, profile_acc, 4, 0);
+}
+
+void set_goal_position(int port_num, uint8_t id, uint32_t goal_position)
+{
+    set_control_table(port_num, id, GOAL_POS_ADDR, goal_position, 4, 0);
 }
 
 void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
