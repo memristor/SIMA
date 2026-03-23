@@ -121,12 +121,12 @@ void shut_motors_off()
 void SIMA_N_YELLOW()
 {
     set_goal_position(dxl_port_num, MOTOR_3_ID, 2048);
-    printf("POS 3 READ 1: %ld", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
+    printf("POS 3 READ 1: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
 
     move_motors_mm(sw_group_nums[2], 1000, 1000);
     rotate_motors(90);
-    set_goal_position(dxl_port_num, MOTOR_3_ID, 2048);
-    printf("POS 3 READ 2: %ld", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
+    set_goal_position(dxl_port_num, MOTOR_3_ID, 4095);
+    printf("POS 3 READ 2: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
 
     move_motors_mm(sw_group_nums[2], 10000, 10000);
 }

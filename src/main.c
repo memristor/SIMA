@@ -10,37 +10,21 @@
 #include "sensor.h"
 #include "servo.h"
 #include "init.h"
+#include "pump.h"
 
 bool motors_enabled = false;
 bool motors_moving = false;
 
 void app_main() 
 {
-    //printf("UART/DXL port name: %s\n", getPortName(dxl_port_num));
-    //vTaskDelay(1000 / portTICK_PERIOD_MS);
-    //printf("UART/DXL set baudrate: %d\n", getBaudRate(dxl_port_num));
-
-    /*if (uart_get_baudrate(dxl_port_num, &esp_baudrate) != ESP_FAIL)
-    {
-        printf("Baudrate read successful: %ld\n", esp_baudrate);
-    }
-    else
-    {
-        printf("Baudrate read failed!\n");  
-    }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-    printf("Address of port in packetData: %p\n", packetData);*/
 
     init_strat();
     setup_sync();
     setupMotors();
+    setup_pump();
     sensor_init();
     setup_servo();
     init_timer();
-
-    //printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
-    //printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
     
     if (!read_position(group_num_sr, present_pos_read))
     {
@@ -62,71 +46,34 @@ void app_main()
     profile_vel_sw[1] = MAX_VEL_ACC;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC);
+    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/2);
    
     profile_acc_sw[0] = MAX_VEL_ACC/5;
     profile_acc_sw[1] = MAX_VEL_ACC/5;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/5);
+    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/10);
 
-    //start_timer();
+    rotate_pump(45);
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(60);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(45);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(-30);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(-30);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(-30);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
 
-    //rotate_motors(720);
-
-    //vTaskDelay(10000 / portTICK_PERIOD_MS);
-
-    //vTaskDelay(10000 / portTICK_PERIOD_MS);
-
-    //rotate_motors(90);
-
-    //move_motors_mm(sw_group_nums[2], -1000, -1000);
-
-    //rotate_motors(720*2);
-
-    //rotate_motors(-720*2);
-
-    //vTaskDelay(120000 / portTICK_PERIOD_MS);
-
-    //profile_vel_sw[0] = MAX_VEL_ACC;
-    //profile_vel_sw[1] = MAX_VEL_ACC;
-
-    //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-
-    //start_timer();
-    //create_stop_motors_end_task();
-    //create_check_sensors_task();
-
-    //vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-    //move_motors_mm(sw_group_nums[2], 10000, 10000);
-
-    //goal_pos_sw[0] = -100000;
-    //goal_pos_sw[1] =  100000;
-    
-    //sync_write_gposition(sw_group_nums[2], goal_pos_sw);
-    
-    //set_operating_mode(dxl_port_num, MOTOR_1_ID, OP_POSITION);
-
-    //set_control_table(dxl_port_num, MOTOR_1_ID, VELOCITY_LIM_ADDR, 265, 4, 1);
-    //set_control_table(dxl_port_num, MOTOR_2_ID, VELOCITY_LIM_ADDR, 265, 4, 1);
-
-    //printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
-    //printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
+    pick_up_bar();
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    release_bar();
 
     while (1)
     {
-        
-        /*if (start_flag == true && !motors_enabled)
-        {
-            create_stop_motors_end_task();
-            create_check_sensors_task();
-            motors_enabled = true;
-            move_motors_mm(sw_group_nums[2], 10000, 10000);
-        }
-
-        vTaskDelay(20 / portTICK_PERIOD_MS);*/
-
+        /*
         check_led();
 
         if (prev_cinc && cinc && !timer_on)
@@ -152,83 +99,8 @@ void app_main()
             check_strat();
 
             motors_moving = true;
-        }
+        }*/
         
         vTaskDelay(20 / portTICK_PERIOD_MS);
-        //vTaskDelay(1000 / portTICK_PERIOD_MS);
-        /*
-        if (!read_position(group_num_sr, present_pos_read))
-        {
-            printf("Position read failed.\n");
-        }
-        else
-        {
-            printf("Position read successful!\n");
-            printf("Motor 1 position: %ld\n", present_pos_read[0]);
-            printf("Motor 2 position: %ld\n", present_pos_read[1]);
-        }
-
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
-        broadcastPing(dxl_port_num, DXL_PROTOCOL);
-
-        printf("Broadcast ping test: \n");
-        if (packetData[dxl_port_num].communication_result != COMM_SUCCESS)
-        {
-            printf("PING FAIL! IDE DIZEL :(\n");
-            printf("%s\n", getTxRxResult(DXL_PROTOCOL, packetData[dxl_port_num].communication_result));
-            printf("%s\n", getRxPacketError(DXL_PROTOCOL, packetData[dxl_port_num].error));
-        }
-        else
-        {
-            printf("PING SUCCESSFUL! IDE GASSSS\n");
-        }
-
-        printf("Detected IDs from broadcast: ");
-        for (int id = 1; id <= 10; id++) {  // Check common IDs
-            if (getBroadcastPingResult(dxl_port_num, DXL_PROTOCOL, id)) {
-                printf("%d ", id);
-            }
-        }
-        printf("\n");
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-
-        ping(dxl_port_num, DXL_PROTOCOL, MOTOR_1_ID);
-
-        printf("Regular ping test 1: \n");
-        if (packetData[dxl_port_num].communication_result != COMM_SUCCESS)
-        {
-            printf("PING FAIL! IDE DIZEL :(\n");
-            printf("%s\n", getTxRxResult(DXL_PROTOCOL, packetData[dxl_port_num].communication_result));
-            printf("%s\n", getRxPacketError(DXL_PROTOCOL, packetData[dxl_port_num].error));
-        }
-        else
-        {
-            printf("PING SUCCESSFUL! IDE GASSSS\n");
-        }
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-        ping(dxl_port_num, DXL_PROTOCOL, MOTOR_2_ID);
-
-        printf("Regular ping test 2: \n");
-        if (packetData[dxl_port_num].communication_result != COMM_SUCCESS)
-        {
-            printf("PING FAIL! IDE DIZEL :(\n");
-            printf("%s\n", getTxRxResult(DXL_PROTOCOL, packetData[dxl_port_num].communication_result));
-            printf("%s\n", getRxPacketError(DXL_PROTOCOL, packetData[dxl_port_num].error));
-        }
-        else
-        {
-            printf("PING SUCCESSFUL! IDE GASSSS\n");
-        }
-
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
-        clearPort(dxl_port_num);
-        printf("\n"); 
-        */
-
-    }
-    
+    }   
 }
