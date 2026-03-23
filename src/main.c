@@ -54,8 +54,8 @@ void app_main()
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/10);
 
-    rotate_pump(45);
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    //rotate_pump(45);
+    //vTaskDelay(5000 / portTICK_PERIOD_MS);
     //rotate_pump(60);
     //vTaskDelay(5000 / portTICK_PERIOD_MS);
     //rotate_pump(45);
@@ -68,7 +68,7 @@ void app_main()
     //vTaskDelay(5000 / portTICK_PERIOD_MS);
 
     pick_up_bar();
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    vTaskDelay(10000 / portTICK_PERIOD_MS);
     release_bar();
 
     while (1)
