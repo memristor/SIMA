@@ -40,6 +40,7 @@ void stop_motors_end(void *pvParams)
 
     while (true)
     {
+        printf("TestTestTest\n");
         xTaskDelayUntil(&xLastWakeTime, xFreq);
         //printf("STOP TASK\n");
 
