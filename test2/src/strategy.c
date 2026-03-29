@@ -127,7 +127,13 @@ void SIMA_N_YELLOW()
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], 1500, 1500);
+    move_motors_mm(sw_group_nums[2], 270, 270);
+    rotate_motors(-10);
+    move_motors_mm(sw_group_nums[2], 100, 100);
+    rotate_motors(-27);
+    move_motors_mm(sw_group_nums[2], 650, 650);
+    rotate_motors(10);
+    move_motors_mm(sw_group_nums[2], 600, 600);
 }
 
 

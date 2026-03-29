@@ -68,8 +68,8 @@ void app_main()
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
-    rotate_motors(1440);
-    rotate_motors(-1440);
+    /*rotate_motors(1440);
+    rotate_motors(-1440);*/
 
     while (1)
     {
