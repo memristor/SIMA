@@ -68,12 +68,6 @@ void app_main()
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
-    // OVO U BLUE KAD SE SASTAVI
-    move_motors_mm(sw_group_nums[2], 500, 500);
-    rotate_motors(-40);
-    move_motors_mm(sw_group_nums[2], 1312, 1312);
-    rotate_motors(-50);
-    move_motors_mm(sw_group_nums[2], 450, 450);
 
     while (1)
     {

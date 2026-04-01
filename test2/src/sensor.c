@@ -25,40 +25,29 @@ void check_sensors_task(void *pvParams)
         else if (read_sensors() == true && state == false)
         {
             //read_position(group_num_sr, present_pos_read);
-            
-            printf("Motors position 1 PRE WRITE STOP: %ld\n", present_pos_read[0]);
-            printf("Motors position 2: %ld\n", present_pos_read[1]);
             sync_write_gposition(sw_group_nums[2], present_pos_read);
-            printf("Motors goal position 1 STOP: %ld\n", goal_pos_sw[0]);
-            printf("Motors goal position 2: %ld\n", goal_pos_sw[1]);
-            printf("Motors position 1: %ld\n", present_pos_read[0]);
-            printf("Motors position 2: %ld\n", present_pos_read[1]);
 
-            //profile_vel_sw[0] = MIN_VEL_ACC;
-            //profile_vel_sw[1] = MIN_VEL_ACC;
+            profile_vel_sw[0] = MIN_VEL_ACC;
+            profile_vel_sw[1] = MIN_VEL_ACC;
 
-            //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+            sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-            //remaining[0] = goal_pos_sw[0] - present_pos_read[0];
-            //remaining[1] = goal_pos_sw[1] - present_pos_read[1];
+            remaining[0] = goal_pos_sw[0] - present_pos_read[0];
+            remaining[1] = goal_pos_sw[1] - present_pos_read[1];
 
             state = true;
         }
         else if (read_sensors() == false && state == true)
         {
-            //profile_vel_sw[0] = MAX_VEL_ACC;
-            //profile_vel_sw[1] = MAX_VEL_ACC;
+            profile_vel_sw[0] = MAX_VEL_ACC;
+            profile_vel_sw[1] = MAX_VEL_ACC;
 
-            //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+            sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-            //goal_pos_sw[0] = remaining[0] + present_pos_read[0];
-            //goal_pos_sw[1] = remaining[1] + present_pos_read[1];
+            goal_pos_sw[0] = remaining[0] + present_pos_read[0];
+            goal_pos_sw[1] = remaining[1] + present_pos_read[1];
 
             sync_write_gposition(sw_group_nums[2], goal_pos_sw);
-            printf("Motors goal position 1 START: %ld\n", goal_pos_sw[0]);
-            printf("Motors goal position 2: %ld\n", goal_pos_sw[1]);
-            printf("Motors position 1: %ld\n", present_pos_read[0]);
-            printf("Motors position 2: %ld\n", present_pos_read[1]);
 
             state = false;
         }
