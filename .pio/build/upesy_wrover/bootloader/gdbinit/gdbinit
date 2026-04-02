@@ -1,0 +1,2 @@
+source /home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader/gdbinit/symbols
+source /home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader/gdbinit/connect

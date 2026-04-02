@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/home/aleksandar/Desktop/MEMRISTOR/SIMA/.pio/build/upesy_wrover/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}
