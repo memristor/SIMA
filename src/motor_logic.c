@@ -6,7 +6,7 @@
 
 #define WHEEL_DIAMETER_1_mm 88
 #define WHEEL_DIAMETER_2_mm 88
-#define WHEELS_DISTANCE_mm 97.25
+#define WHEELS_DISTANCE_mm 111.25
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
@@ -259,12 +259,16 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
     sync_write_gposition(gpos_group_sw_num, goal_pos_sw);
 
+    profile_acc_sw[0] = MAX_VEL / 8;
+    profile_acc_sw[1] = MAX_VEL / 8;
+    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+
     do
     {
         if (!read_position(group_num_sr, present_pos_read))
             continue;
         vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while (abs(present_pos_read[0] - goal_pos_sw[0]) > 20 || abs(present_pos_read[1] - goal_pos_sw[1]) > 20);
+    } while (abs(goal_pos_sw[0] - present_pos_read[0]) > 20 || abs(goal_pos_sw[1] - present_pos_read[1]) > 20);
 
     // Deo koji proverava kraj kretanja stavljen unutar stop_motors_end task-a u strategy.h
       
@@ -273,6 +277,10 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 void rotate_motors(double angle_deg)
 {
     double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);
+
+    profile_acc_sw[0] = MAX_VEL / 16;
+    profile_acc_sw[1] = MAX_VEL / 16;
+    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }
@@ -293,7 +301,7 @@ void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_
     {
         if (!read_position(pos_group_sr_num, present_pos_read))
             continue;
-        if (abs(present_pos_read[0] - goal_pos_sw[0]) <= 20 && abs(present_pos_read[1] - goal_pos_sw[1]) <= 20)
+        if ((goal_pos_sw[0] - present_pos_read[0]) <= 20 && (goal_pos_sw[1] - present_pos_read[1]) <= 20)
             break;
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }

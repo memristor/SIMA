@@ -74,7 +74,7 @@ void create_check_sensors_task()
                                             NULL,
                                             2,                 
                                             &check_sensors_handle,
-                                            0                       // Stavljeno na CORE0 sa tajmerom
+                                            0                       
                                             );                     
 
     if (creation_result != pdPASS)

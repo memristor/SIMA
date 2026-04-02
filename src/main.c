@@ -21,7 +21,6 @@ void app_main()
     init_strat();
     setup_sync();
     setupMotors();
-    setup_pump();
     sensor_init();
     setup_servo();
     init_timer();
@@ -46,30 +45,17 @@ void app_main()
     profile_vel_sw[1] = MAX_VEL_ACC;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/2);
+    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/4);
    
-    profile_acc_sw[0] = MAX_VEL_ACC/5;
-    profile_acc_sw[1] = MAX_VEL_ACC/5;
+    profile_acc_sw[0] = MAX_VEL_ACC/8;
+    profile_acc_sw[1] = MAX_VEL_ACC/8;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/10);
+    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
+    setup_pump();
 
-    //rotate_pump(45);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-    //rotate_pump(60);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-    //rotate_pump(45);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-    //rotate_pump(-30);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-    //rotate_pump(-30);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-    //rotate_pump(-30);
-    //vTaskDelay(5000 / portTICK_PERIOD_MS);
-
-    pick_up_bar();
-    vTaskDelay(10000 / portTICK_PERIOD_MS);
-    release_bar();
+    rotate_motors(360);
+    //rotate_motors(-90);
 
     while (1)
     {

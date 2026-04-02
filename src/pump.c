@@ -13,6 +13,7 @@ void setup_pump(void)
 {
     gpio_reset_pin(PUMP_PIN);
     gpio_set_direction(PUMP_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_level(PUMP_PIN, false);
 
     set_goal_position(dxl_port_num, MOTOR_3_ID, HIGHEST_POSITION);
 }
@@ -35,9 +36,8 @@ void rotate_pump(double angle)
     do
     {
         pump_motor_pos = read_profile_gposition(dxl_port_num, MOTOR_3_ID);
-        printf("PUMP inside position: %ld\n", pump_motor_pos);
         vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while (abs(pump_motor_gpos - pump_motor_pos) > 20);
+    } while ((pump_motor_gpos - pump_motor_pos) > 20);
 }
 
 void pick_up_bar()

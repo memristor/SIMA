@@ -4,8 +4,8 @@
 #include "motor_logic.h"
 
 #define PUMP_PIN GPIO_NUM_4
-#define LOWEST_POSITION 1277
-#define HIGHEST_POSITION 2250
+#define LOWEST_POSITION 2451
+#define HIGHEST_POSITION 2860
 
 extern uint32_t pump_motor_pos;
 extern uint32_t pump_motor_gpos;
