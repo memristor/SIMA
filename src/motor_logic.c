@@ -6,7 +6,7 @@
 
 #define WHEEL_DIAMETER_1_mm 88
 #define WHEEL_DIAMETER_2_mm 88
-#define WHEELS_DISTANCE_mm 111.25
+#define WHEELS_DISTANCE_mm 103.33
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
@@ -26,6 +26,7 @@ void setupMotors()
     }
     printf("Motor count: %d\n", motor_count);
     if (motor_count == DXL_ID_CNT + 1)
+    
         printf("Motor connection established!\n");
     else
     {

@@ -1,6 +1,7 @@
 #include "strategy.h"
 #include "servo.h"
 #include "motor_logic.h"
+#include "pump.h"
 
 #include "freertos/FreeRTOS.h"
 #include "FreeRTOSConfig.h"
@@ -120,15 +121,27 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    set_goal_position(dxl_port_num, MOTOR_3_ID, 2048);
+    /*
+    set_goal_position(dxl_port_num, MOTOR_3_ID, 3000);
     printf("POS 3 READ 1: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
 
     move_motors_mm(sw_group_nums[2], 1000, 1000);
     rotate_motors(90);
-    set_goal_position(dxl_port_num, MOTOR_3_ID, 4095);
+    set_goal_position(dxl_port_num, MOTOR_3_ID, 3300);
     printf("POS 3 READ 2: %ld\n", read_profile_gposition(dxl_port_num, MOTOR_3_ID));
 
     move_motors_mm(sw_group_nums[2], 10000, 10000);
+    */
+
+    move_motors_mm(sw_group_nums[2], -400, -400);
+    pick_up_bar();
+    rotate_pump(72);
+    vTaskDelay(1500/portTICK_PERIOD_MS);
+    rotate_pump(-60);
+    move_motors_mm(sw_group_nums[2], 400, 400);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+    release_bar();
+
 }
 
 void SIMA_N_BLUE()

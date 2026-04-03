@@ -53,21 +53,25 @@ void app_main()
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
     setup_pump();
-
-    rotate_motors(360);
+    /*
+    vTaskDelay(300/portTICK_PERIOD_MS);
+    rotate_motors(180);
+    vTaskDelay(300/portTICK_PERIOD_MS);
+    rotate_motors(-180);
     //rotate_motors(-90);
-
+    */
     while (1)
     {
-        /*
+        
         check_led();
-
+        
         if (prev_cinc && cinc && !timer_on)
         {
             //printf("CINC pulled: Sending ENABLE signal");
             motors_enabled = true;
         }
         prev_cinc = cinc;
+        
 
         if (motors_enabled == true)
         {
@@ -85,7 +89,7 @@ void app_main()
             check_strat();
 
             motors_moving = true;
-        }*/
+        }
         
         vTaskDelay(20 / portTICK_PERIOD_MS);
     }   
