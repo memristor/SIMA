@@ -37,7 +37,7 @@ void rotate_pump(double angle)
     {
         pump_motor_pos = read_profile_gposition(dxl_port_num, MOTOR_3_ID);
         vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while ((pump_motor_gpos - pump_motor_pos) > 20);
+    } while (abs(pump_motor_gpos - pump_motor_pos) > 20);
 }
 
 void pick_up_bar()
