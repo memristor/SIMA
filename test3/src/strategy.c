@@ -120,14 +120,16 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
+    /*move_motors_mm(sw_group_nums[2], 1000, 1000);
     rotate_motors(90);
-    move_motors_mm(sw_group_nums[2], 10000, 10000);
+    move_motors_mm(sw_group_nums[2], 10000, 10000);*/
+    move_motors_mm(sw_group_nums[2], 845.0, 845.0);
 }
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], 1500, 1500);
+    //move_motors_mm(sw_group_nums[2], 1500, 1500);
+    move_motors_mm(sw_group_nums[2], 845.0, 845.0);
 }
 
 
