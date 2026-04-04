@@ -132,7 +132,7 @@ void SIMA_N_YELLOW()
 
     move_motors_mm(sw_group_nums[2], 10000, 10000);
     */
-
+    /* ovo je test kupljenja
     move_motors_mm(sw_group_nums[2], -400, -400);
     pick_up_bar();
     rotate_pump(72);
@@ -141,12 +141,61 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], 400, 400);
     vTaskDelay(1000/portTICK_PERIOD_MS);
     release_bar();
+    */
+
+    //test guranja dasaka sa podijuma
+    move_motors_mm(sw_group_nums[2],-250, -250);
+    move_motors_mm(sw_group_nums[2],190, 190);
+    rotate_motors(-50);
+    move_motors_mm(sw_group_nums[2],-360, -360);
+
+
 
 }
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], 10000, 10000);
+    //kupljenje dve daske, ostavljanje i guranje crnih i plavih
+    rotate_motors(15);
+    move_motors_mm(sw_group_nums[2],160, 160);
+    rotate_motors(-15);
+    pick_up_bar();
+    move_motors_mm(sw_group_nums[2],258, 258);
+    rotate_pump(72);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+    rotate_pump(-90);
+    //razlika u pumpi od pocetne pozicije -18
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+    move_motors_mm(sw_group_nums[2],-50, -50);
+    rotate_motors(-15);
+    move_motors_mm(sw_group_nums[2],-65, -65);
+    rotate_motors(15);
+    move_motors_mm(sw_group_nums[2],-315, -315);
+    rotate_motors(90);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    release_bar();
+    rotate_motors(-90);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    //zavrsio ostavljanje prve daske
+    pick_up_bar();
+    move_motors_mm(sw_group_nums[2],470, 470);
+    rotate_pump(90);
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+    rotate_pump(-90);
+    //razlika u pumpi od pocetne pozicije 0
+    vTaskDelay(1000/portTICK_PERIOD_MS);
+    rotate_motors(15);
+    move_motors_mm(sw_group_nums[2],-50, -50);
+    rotate_motors(-15);
+    move_motors_mm(sw_group_nums[2],-400, -400);
+    rotate_motors(90);
+    release_bar();
+    rotate_motors(-75);
+    move_motors_mm(sw_group_nums[2],650, 650);
+    rotate_motors(6.5);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    move_motors_mm(sw_group_nums[2],-610, -610);
+    rotate_motors(-100);
 }
 
 

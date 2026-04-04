@@ -7,7 +7,7 @@
 #define TIMER_TAG "TIMER.H"
 
 #define DISABLED_TIME_uS 5000000
-#define RUN_TIME_uS 14500000
+#define RUN_TIME_uS 99500000 //ovde je zbog ninje na 99.5s, inace ide 14.5s
 
 volatile bool end_flag = false;
 bool start_flag = false;
