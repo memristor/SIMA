@@ -241,12 +241,28 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
     sync_write_gposition(gpos_group_sw_num, goal_pos_sw);
 
-    do
+    /*do
     {
         if (!read_position(group_num_sr, present_pos_read))
             continue;
         vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while (abs(goal_pos_sw[0] - present_pos_read[0]) > 20 || abs(goal_pos_sw[1] - present_pos_read[1]) > 20);
+    } while (abs(goal_pos_sw[0] - present_pos_read[0]) > 20 || abs(goal_pos_sw[1] - present_pos_read[1]) > 20);*/
+    while(true)
+    {
+        if (!read_position(group_num_sr, present_pos_read))
+            continue;
+
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+        int64_t pos_sw = goal_pos_sw[0];
+        int64_t pos_read = present_pos_read[0];
+        if (llabs(pos_sw - pos_read) <= 20)
+            break;
+
+        pos_sw = goal_pos_sw[1];
+        pos_read = present_pos_read[1];
+        if (llabs(pos_sw - pos_read) <= 20)
+            break;
+    }
 
     // Deo koji proverava kraj kretanja stavljen unutar stop_motors_end task-a u strategy.h
       
