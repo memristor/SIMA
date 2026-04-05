@@ -120,30 +120,28 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    /*move_motors_mm(sw_group_nums[2], 1000, 1000);
-    rotate_motors(90);
-    move_motors_mm(sw_group_nums[2], 10000, 10000);*/
-
-    vTaskDelay(400/ portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 270, 270);
+    move_motors_mm(sw_group_nums[2], 700, 700);
     rotate_motors(10);
     move_motors_mm(sw_group_nums[2], 100, 100);
-    rotate_motors(27);
-    move_motors_mm(sw_group_nums[2], 650, 650);
-    rotate_motors(-15);
-    move_motors_mm(sw_group_nums[2], 610, 610);
+    rotate_motors(35);
+    move_motors_mm(sw_group_nums[2], 540, 540);
+    rotate_motors(-45);
+    move_motors_mm(sw_group_nums[2], 600, 600);
+    rotate_motors(90);
+    move_motors_mm(sw_group_nums[2], 150, 150);
 }
 
 void SIMA_N_BLUE()
 {
-    vTaskDelay(400 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 270, 270);
+    move_motors_mm(sw_group_nums[2], 700, 700);
     rotate_motors(-10);
     move_motors_mm(sw_group_nums[2], 100, 100);
-    rotate_motors(-27);
-    move_motors_mm(sw_group_nums[2], 650, 650);
-    rotate_motors(15);
-    move_motors_mm(sw_group_nums[2], 610, 610);
+    rotate_motors(-35);
+    move_motors_mm(sw_group_nums[2], 540, 540);
+    rotate_motors(45);
+    move_motors_mm(sw_group_nums[2], 600, 600);
+    rotate_motors(-90);
+    move_motors_mm(sw_group_nums[2], 150, 150);
 }
 
 
