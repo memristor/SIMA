@@ -3,6 +3,7 @@
 
 #include "esp_timer.h"
 #include "esp_log.h"
+#include "semaphores.h"
 
 #define TIMER_TAG "TIMER.H"
 
@@ -22,6 +23,7 @@ void IRAM_ATTR timer_call(void *arg)
         printf("Endflag timer started\n");
         esp_timer_start_once(end_timer, RUN_TIME_uS);
         start_flag = true;
+        xSemaphoreGive(startSemaphore);
     }
     else
     {

@@ -10,7 +10,6 @@
 #include "sensor.h"
 #include "servo.h"
 #include "init.h"
-#include "json.h"
 
 bool motors_enabled = false;
 bool motors_moving = false;
@@ -54,7 +53,7 @@ void app_main()
     //move_motors_mm(sw_group_nums[2], -1000, -1000);
     //move_motors_mm(sw_group_nums[2], 1000, 1000); 
 
-    rotate_motors(-90);
+    //rotate_motors(-90);
     //rotate_motors(-1440);
 
     while (1)

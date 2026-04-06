@@ -10,9 +10,12 @@
 #include "sensor.h"
 #include "servo.h"
 #include "init.h"
+#include "semaphores.h"
+#include "led.h"
 
-bool motors_enabled = false;
+//bool motors_enabled = false;
 bool motors_moving = false;
+SemaphoreHandle_t cincSemaphore, startSemaphore;
 
 void app_main() 
 {
@@ -67,15 +70,21 @@ void app_main()
     profile_acc_sw[1] = MAX_VEL_ACC/8;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+    cincSemaphore = xSemaphoreCreateBinary();
+    startSemaphore = xSemaphoreCreateBinary();
 
-    // OVO U BLUE KAD SE SASTAVI
-    move_motors_mm(sw_group_nums[2], 500, 500);
-    rotate_motors(-40);
-    move_motors_mm(sw_group_nums[2], 1312, 1312);
-    rotate_motors(-50);
-    move_motors_mm(sw_group_nums[2], 450, 450);
+    create_check_led_task();
 
-    while (1)
+
+    xSemaphoreTake(cincSemaphore, portMAX_DELAY);
+    start_timer();
+    xSemaphoreTake(startSemaphore, portMAX_DELAY);
+    create_stop_motors_end_task();
+    create_check_sensors_task();
+
+    check_strat();
+
+    /*while (1)
     {
         
         check_led();
@@ -107,6 +116,6 @@ void app_main()
         
         vTaskDelay(20 / portTICK_PERIOD_MS);
 
-    }
+    }*/
     
 }

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "esp-idf/bootloader",
+		"source" : "/home/aleksandar/.platformio/packages/framework-espidf/components/bootloader"
+	}
+}

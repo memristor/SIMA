@@ -1,6 +1,7 @@
 #include "cinc_logic.h"
 #include "freertos/FreeRTOS.h"
 #include "driver/gpio.h"
+#include "semaphores.h"
 
 bool prev_cinc = false;
 bool cinc      = false;
@@ -58,6 +59,8 @@ void check_led()
             gpio_set_level(BLUE_PIN, false);
             gpio_set_level(YELLOW_PIN, true);
         }
+
+        xSemaphoreGive(cincSemaphore);
     }
 }
 
