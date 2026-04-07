@@ -45,16 +45,10 @@ void app_main()
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
    
-    profile_acc_sw[0] = MAX_VEL_ACC / 8;
-    profile_acc_sw[1] = MAX_VEL_ACC / 8;
+    profile_acc_sw[0] = MAX_VEL_ACC / 10;
+    profile_acc_sw[1] = MAX_VEL_ACC / 10;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-
-    //move_motors_mm(sw_group_nums[2], -1000, -1000);
-    //move_motors_mm(sw_group_nums[2], 1000, 1000); 
-
-    //rotate_motors(-90);
-    //rotate_motors(-1440);
 
     while (1)
     {

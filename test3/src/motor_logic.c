@@ -6,7 +6,7 @@
 
 #define WHEEL_DIAMETER_1_mm 88
 #define WHEEL_DIAMETER_2_mm 88
-#define WHEELS_DISTANCE_mm 95.5
+#define WHEELS_DISTANCE_mm 96
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);

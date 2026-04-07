@@ -59,15 +59,15 @@ void app_main()
     printf("POS: %d\n", sw_group_nums[2]);
 
     profile_vel_sw[0] = MAX_VEL_ACC;
-    profile_vel_sw[1] = MAX_VEL_ACC;
+    profile_vel_sw[1] = MAX_VEL_ACC - 2;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
    
-    profile_acc_sw[0] = MAX_VEL_ACC/8;
-    profile_acc_sw[1] = MAX_VEL_ACC/8;
+    profile_acc_sw[0] = MAX_VEL_ACC / 10;
+    profile_acc_sw[1] = MAX_VEL_ACC / 10;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-
+    //move_motors_mm(sw_group_nums[2], 1000, 1000);
 
     while (1)
     {
@@ -92,7 +92,6 @@ void app_main()
         if (start_flag == true && motors_moving == false)
         {
             create_stop_motors_end_task();
-            create_check_sensors_task();
 
             check_strat();
 

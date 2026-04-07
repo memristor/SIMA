@@ -1,4 +1,5 @@
 #include "strategy.h"
+#include "sensor.h"
 #include "servo.h"
 #include "motor_logic.h"
 
@@ -121,14 +122,16 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    rotate_motors(35);
-    move_motors_mm(sw_group_nums[2], 930, 930);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    create_check_sensors_task();
+    move_motors_mm(sw_group_nums[2], -1020, -1020);
 }
 
 void SIMA_N_BLUE()
 {
-    rotate_motors(-35);
-    move_motors_mm(sw_group_nums[2], 930, 930);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    create_check_sensors_task();
+    move_motors_mm(sw_group_nums[2], -1020, -1020);
 }
 
 
