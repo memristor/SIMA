@@ -94,7 +94,7 @@ void app_main()
         if (start_flag == true && motors_moving == false)
         {
             create_stop_motors_end_task();
-            create_check_sensors_task();
+            //create_check_sensors_task();
 
             check_strat();
 
