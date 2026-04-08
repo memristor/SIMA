@@ -124,7 +124,7 @@ void SIMA_N_YELLOW()
     rotate_motors(45);
     move_motors_mm(sw_group_nums[2], -566, -566);
     rotate_motors(45);
-    move_motors_mm(sw_group_nums[2], -102, -102);
+    move_motors_mm(sw_group_nums[2], -57, -57);
 }
 
 void SIMA_N_BLUE()
@@ -133,7 +133,7 @@ void SIMA_N_BLUE()
     rotate_motors(-45);
     move_motors_mm(sw_group_nums[2], -566, -566);
     rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], -102, -102);
+    move_motors_mm(sw_group_nums[2], -57, -57);
 }
 
 
