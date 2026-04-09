@@ -4,12 +4,16 @@
 #include "freertos/task.h"
 #include "math.h"
 
-#define WHEEL_DIAMETER_1_mm 88
-#define WHEEL_DIAMETER_2_mm 88
-#define WHEELS_DISTANCE_mm 103.33
+#define WHEEL_DIAMETER_1_mm 85
+#define WHEEL_DIAMETER_2_mm 85
+#define WHEELS_DISTANCE_mm 96
+#define WHEELS_DISTANCE_PUMP 192
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
+
+volatile uint8_t is_rotate = 0;
+volatile bool is_pump = false;
 
 void setupMotors() 
 {
@@ -253,16 +257,24 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
 
+    if (!is_rotate)
+    {
+        profile_vel_sw[0] = MAX_VEL;
+        profile_vel_sw[1] = MAX_VEL;
+        sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+        profile_acc_sw[0] = MAX_VEL / 20;
+        profile_acc_sw[1] = MAX_VEL / 20;
+        sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+    }
+    else
+        is_rotate = 0;
+
     read_position(group_num_sr, present_pos_read);
 
     goal_pos_sw[0] = present_pos_read[0] - offset1;
     goal_pos_sw[1] = present_pos_read[1] + offset2;
 
     sync_write_gposition(gpos_group_sw_num, goal_pos_sw);
-
-    profile_acc_sw[0] = MAX_VEL / 8;
-    profile_acc_sw[1] = MAX_VEL / 8;
-    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
 
     do
     {
@@ -275,13 +287,22 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
       
 }
 
-void rotate_motors(double angle_deg)
+void rotate_motors(double angle_deg, bool is_pump)
 {
     double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);
 
-    profile_acc_sw[0] = MAX_VEL / 16;
-    profile_acc_sw[1] = MAX_VEL / 16;
-    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+    if (is_pump)
+        arc_mm = WHEELS_DISTANCE_PUMP * (angle_deg * M_PI / 360);
+
+    is_rotate = 1;
+
+    profile_vel_sw[0] = MAX_VEL / 2;
+    profile_vel_sw[1] = MAX_VEL / 2;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    profile_acc_sw[0] = MAX_VEL / 40;
+    profile_acc_sw[1] = MAX_VEL / 40;
+    sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+    
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }

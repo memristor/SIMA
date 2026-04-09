@@ -146,7 +146,7 @@ void SIMA_N_YELLOW()
     //test guranja dasaka sa podijuma
     move_motors_mm(sw_group_nums[2],-250, -250);
     move_motors_mm(sw_group_nums[2],190, 190);
-    rotate_motors(-50);
+    rotate_motors(-50, false);
     move_motors_mm(sw_group_nums[2],-360, -360);
 
 
@@ -156,46 +156,48 @@ void SIMA_N_YELLOW()
 void SIMA_N_BLUE()
 {
     //kupljenje dve daske, ostavljanje i guranje crnih i plavih
-    rotate_motors(15);
+    rotate_motors(15, false);
     move_motors_mm(sw_group_nums[2],160, 160);
-    rotate_motors(-15);
+    rotate_motors(-15, false);
+    move_motors_mm(sw_group_nums[2],262, 262);
     pick_up_bar();
-    move_motors_mm(sw_group_nums[2],258, 258);
-    rotate_pump(72);
+    rotate_pump(90);
     vTaskDelay(1000/portTICK_PERIOD_MS);
     rotate_pump(-90);
     //razlika u pumpi od pocetne pozicije -18
     vTaskDelay(1000/portTICK_PERIOD_MS);
     move_motors_mm(sw_group_nums[2],-50, -50);
-    rotate_motors(-15);
+    rotate_motors(-15, true);
     move_motors_mm(sw_group_nums[2],-65, -65);
-    rotate_motors(15);
-    move_motors_mm(sw_group_nums[2],-315, -315);
-    rotate_motors(90);
+    rotate_motors(15, true);
+    move_motors_mm(sw_group_nums[2],-285, -285);
+    rotate_motors(90, true);
     vTaskDelay(500/portTICK_PERIOD_MS);
     release_bar();
-    rotate_motors(-90);
+    move_motors_mm(sw_group_nums[2], -20, -20);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    rotate_motors(-90, false);
     vTaskDelay(500/portTICK_PERIOD_MS);
     //zavrsio ostavljanje prve daske
-    pick_up_bar();
     move_motors_mm(sw_group_nums[2],470, 470);
+    pick_up_bar();
     rotate_pump(90);
     vTaskDelay(1000/portTICK_PERIOD_MS);
     rotate_pump(-90);
     //razlika u pumpi od pocetne pozicije 0
     vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_motors(15);
+    rotate_motors(15, true);
     move_motors_mm(sw_group_nums[2],-50, -50);
-    rotate_motors(-15);
+    rotate_motors(-15, true);
     move_motors_mm(sw_group_nums[2],-400, -400);
-    rotate_motors(90);
+    rotate_motors(90, true);
     release_bar();
-    rotate_motors(-75);
+    rotate_motors(-75, false);
     move_motors_mm(sw_group_nums[2],650, 650);
-    rotate_motors(6.5);
+    rotate_motors(6.5, false);
     vTaskDelay(500/portTICK_PERIOD_MS);
     move_motors_mm(sw_group_nums[2],-610, -610);
-    rotate_motors(-100);
+    rotate_motors(-100, false);
 }
 
 

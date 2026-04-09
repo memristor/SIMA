@@ -47,22 +47,31 @@ void app_main()
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
     set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/4);
    
-    profile_acc_sw[0] = MAX_VEL_ACC/8;
-    profile_acc_sw[1] = MAX_VEL_ACC/8;
+    profile_acc_sw[0] = MAX_VEL_ACC/20;
+    profile_acc_sw[1] = MAX_VEL_ACC/20;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
     setup_pump();
+
+    
+    pick_up_bar();
+    rotate_pump(90);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    rotate_pump(-90);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    rotate_motors(90, true);
+    //move_motors_mm(sw_group_nums[2], -1100, -1100);
     /*
-    vTaskDelay(300/portTICK_PERIOD_MS);
-    rotate_motors(180);
-    vTaskDelay(300/portTICK_PERIOD_MS);
-    rotate_motors(-180);
-    //rotate_motors(-90);
+    rotate_pump(90);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    release_bar();
     */
+    //rotate_motors(90);
+    
     while (1)
     {
-        
+        /*
         check_led();
         
         if (prev_cinc && cinc && !timer_on)
@@ -89,8 +98,9 @@ void app_main()
             check_strat();
 
             motors_moving = true;
-        }
-        
+        }*/
+
         vTaskDelay(20 / portTICK_PERIOD_MS);
+        
     }   
 }
