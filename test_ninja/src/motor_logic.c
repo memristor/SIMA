@@ -4,7 +4,7 @@
 #include "freertos/task.h"
 #include "math.h"
 
-#define WHEEL_DIAMETER_1_mm 83.4
+#define WHEEL_DIAMETER_1_mm 83.56
 #define WHEEL_DIAMETER_2_mm 83.497
 #define WHEELS_DISTANCE_mm 110.86
 
