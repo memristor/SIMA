@@ -132,12 +132,24 @@ void SIMA_N_YELLOW()
     rotate_motors(90);
     move_motors_mm(sw_group_nums[2], 150, 150);
     */
-    create_check_sensors_task();
+
+    /*create_check_sensors_task();
     move_motors_mm(sw_group_nums[2], 550, 550);
     rotate_motors(51.34);
     move_motors_mm(sw_group_nums[2], 321, 321);
     rotate_motors(-51.34);
     move_motors_mm(sw_group_nums[2], 1000, 1000);
+    rotate_motors(90);
+    move_motors_mm(sw_group_nums[2], 150, 150);*/
+
+    create_check_sensors_task();
+    move_motors_mm(sw_group_nums[2], 550, 550);
+    rotate_motors(10);
+    move_motors_mm(sw_group_nums[2], 100, 100);
+    rotate_motors(35);
+    move_motors_mm(sw_group_nums[2], 540, 540);
+    rotate_motors(-45);
+    move_motors_mm(sw_group_nums[2], 600, 600);
     rotate_motors(90);
     move_motors_mm(sw_group_nums[2], 150, 150);
 }
