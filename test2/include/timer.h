@@ -6,8 +6,8 @@
 
 #define TIMER_TAG "TIMER.H"
 
-#define DISABLED_TIME_uS 5000000
-#define RUN_TIME_uS 13500000
+#define DISABLED_TIME_uS 7000000
+#define RUN_TIME_uS 11500000
 
 volatile bool end_flag = false;
 bool start_flag = false;
@@ -59,6 +59,13 @@ void start_timer()
         ESP_LOGI(TIMER_TAG, "Timer start success.\n");
         timer_on = true;
     }
+}
+
+void delay(uint32_t delay_ms)
+{
+    uint32_t t = esp_timer_get_time();
+
+    while (esp_timer_get_time() - t < delay_ms);
 }
 
 #endif
