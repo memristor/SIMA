@@ -147,7 +147,7 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], -450, -450);
 
 
-    //ovo je kod za guranje
+    //ovo je kod za kupljenje pumpom
     // |
     // |
     // V
@@ -224,23 +224,6 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], 250, 250);
     rotate_motors(-43, false);
     move_motors_mm(sw_group_nums[2], -420, -420);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //ovo je kod za kupljenje pumpom
