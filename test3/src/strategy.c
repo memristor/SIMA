@@ -122,18 +122,18 @@ void SIMA_N_YELLOW()
 {
     move_motors_mm(sw_group_nums[2], -200, -200);
     rotate_motors(45);
-    move_motors_mm(sw_group_nums[2], -700, -700);
+    move_motors_mm(sw_group_nums[2], -707, -707);
     rotate_motors(-45);
-    //move_motors_mm(sw_group_nums[2], -57, -57);
+    move_motors_mm(sw_group_nums[2], -40, -40);
 }
 
 void SIMA_N_BLUE()
 {
     move_motors_mm(sw_group_nums[2], -200, -200);
     rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], -700, -700);
+    move_motors_mm(sw_group_nums[2], -707, -707);
     rotate_motors(45);
-    //move_motors_mm(sw_group_nums[2], -57, -57);
+    move_motors_mm(sw_group_nums[2], -20, -20);
 }
 
 
