@@ -52,23 +52,7 @@ void app_main()
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
-    setup_pump();
-    //OSTALO OD NEKOG PROSLOG TESTA
-    /*
-    pick_up_bar();
-    rotate_pump(90);
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-    rotate_pump(-90);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    rotate_motors(90, true);
-    */
-    //move_motors_mm(sw_group_nums[2], -1100, -1100);
-    /*
-    rotate_pump(90);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    release_bar();
-    */
-    //rotate_motors(90);
+    //setup_pump();
     
     while (1)
     {
@@ -88,13 +72,14 @@ void app_main()
             // Ovde bi se pozvao tajmer i proverila strategija po
             // kojoj bi se SIMA kretala
             start_timer();
+            
             motors_enabled = false;
         } 
 
         if (start_flag == true && motors_moving == false)
         {
             create_stop_motors_end_task();
-            create_check_sensors_task();
+            //create_check_sensors_task();
 
             check_strat();
 

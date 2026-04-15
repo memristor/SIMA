@@ -259,11 +259,11 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
     if (!is_rotate)
     {
-        profile_vel_sw[0] = MAX_VEL/4;
-        profile_vel_sw[1] = MAX_VEL/4;
+        profile_vel_sw[0] = MAX_VEL/2;
+        profile_vel_sw[1] = MAX_VEL/2;
         sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-        profile_acc_sw[0] = MAX_VEL / 16;
-        profile_acc_sw[1] = MAX_VEL / 16;
+        profile_acc_sw[0] = MAX_VEL / 8;
+        profile_acc_sw[1] = MAX_VEL / 8;
         sync_write_velocity(sw_group_nums[0], profile_acc_sw);
     }
     else
@@ -296,11 +296,11 @@ void rotate_motors(double angle_deg, bool is_pump)
 
     is_rotate = 1;
 
-    profile_vel_sw[0] = MAX_VEL / 8;
-    profile_vel_sw[1] = MAX_VEL / 8;
+    profile_vel_sw[0] = MAX_VEL / 4;
+    profile_vel_sw[1] = MAX_VEL / 4;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-    profile_acc_sw[0] = MAX_VEL / 16;
-    profile_acc_sw[1] = MAX_VEL / 16;
+    profile_acc_sw[0] = MAX_VEL/4;
+    profile_acc_sw[1] = MAX_VEL/4;
     sync_write_velocity(sw_group_nums[0], profile_acc_sw);
     
 

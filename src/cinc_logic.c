@@ -66,9 +66,13 @@ void check_strat()
     strat = gpio_get_level(STRAT_PIN);
 
     if (strat)
-        SIMA_N_BLUE();
+    {
+            SIMA_N_BLUE();
+    }
     else 
-        SIMA_N_YELLOW();
+    {
+            SIMA_N_YELLOW();
+    }
 }
 
 void flash_blue()

@@ -121,11 +121,11 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    //ovo je kod za guranje
+    
+    //ovo je kod za guranje - crne smetaju
     // |
     // |
     // V
-
     move_motors_mm(sw_group_nums[2], 350, 350);
     rotate_motors(-25, false);
     move_motors_mm(sw_group_nums[2], 50, 50);
@@ -133,19 +133,43 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], 100, 100);
     rotate_motors(-35, false);
     move_motors_mm(sw_group_nums[2], 200, 200);
-    move_motors_mm(sw_group_nums[2], -200, -200);
-    rotate_motors(35, false);
-    move_motors_mm(sw_group_nums[2], -400, -400);
-    rotate_motors(-25, false);
-    move_motors_mm(sw_group_nums[2], 315, 315);
-    rotate_motors(-4, false);
-    move_motors_mm(sw_group_nums[2], -370., -370);
-    rotate_motors(117.5, false);
-    move_motors_mm(sw_group_nums[2], -250, -250);
-    move_motors_mm(sw_group_nums[2], 250, 250);
-    rotate_motors(47, false);
-    move_motors_mm(sw_group_nums[2], -450, -450);
+    move_motors_mm(sw_group_nums[2], -30, -30);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    rotate_motors(45, false);
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 80, 80);
+    rotate_motors(80, false);
+    move_motors_mm(sw_group_nums[2], 150, 150);
+    rotate_motors(-87, false);
+    move_motors_mm(sw_group_nums[2], -420, -420);
+    rotate_motors(90, false);
+    vTaskDelay(55000/portTICK_PERIOD_MS);
+    
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 240, 240);
+    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -430, -430);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -265, -265);
 
+    while(1){
+                move_motor();
+    }
+
+    
+    /*
+    //brkicev predlog
+    // |
+    // |
+    // V
+    move_motors_mm(sw_group_nums[2],-175, -175);
+    move_motors_mm(sw_group_nums[2],60, 60);
+    rotate_motors(40,false);
+    move_motors_mm(sw_group_nums[2],-90, -90);
+    move_motors_mm(sw_group_nums[2],40, 40);    
+    rotate_motors(40,false);
+    move_motors_mm(sw_group_nums[2],-450, -450);
+    */
 
     //ovo je kod za kupljenje pumpom
     // |
@@ -199,12 +223,11 @@ void SIMA_N_YELLOW()
 }
 
 void SIMA_N_BLUE()
-{
-    //ovo je kod za guranje
+{   
+    //ovo je kod za guranje - crne smetaju
     // |
     // |
     // V
-
     move_motors_mm(sw_group_nums[2], 350, 350);
     rotate_motors(25, false);
     move_motors_mm(sw_group_nums[2], 50, 50);
@@ -212,18 +235,39 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], 100, 100);
     rotate_motors(35, false);
     move_motors_mm(sw_group_nums[2], 200, 200);
-    move_motors_mm(sw_group_nums[2], -200, -200);
-    rotate_motors(-35, false);
-    move_motors_mm(sw_group_nums[2], -400, -400);
-    rotate_motors(25, false);
-    move_motors_mm(sw_group_nums[2], 315, 315);
-    rotate_motors(2.5, false);
-    move_motors_mm(sw_group_nums[2], -370, -370);
-    rotate_motors(-112, false);
-    move_motors_mm(sw_group_nums[2], -250, -250);
-    move_motors_mm(sw_group_nums[2], 250, 250);
-    rotate_motors(-43, false);
+    move_motors_mm(sw_group_nums[2], -30, -30);
+    vTaskDelay(500/portTICK_PERIOD_MS);
+    rotate_motors(-45, false);
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 80, 80);
+    rotate_motors(-80, false);
+    move_motors_mm(sw_group_nums[2], 150, 150);
+    rotate_motors(87, false);
     move_motors_mm(sw_group_nums[2], -420, -420);
+    rotate_motors(-90, false);
+    vTaskDelay(55000/portTICK_PERIOD_MS);
+    
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 240, 240);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -430, -430);
+    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -265, -265);
+
+    while(1){
+                move_motor();
+    }
+
+    //brkicev predlog
+    // |
+    // |
+    // V
+    move_motors_mm(sw_group_nums[2],-160, -160);
+    move_motors_mm(sw_group_nums[2],30, 30);
+    rotate_motors(80,false);
+    move_motors_mm(sw_group_nums[2],-450, -450);
+   
+
 
 
     //ovo je kod za kupljenje pumpom
