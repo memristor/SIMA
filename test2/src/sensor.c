@@ -1,8 +1,6 @@
 #include "sensor.h"
 #include "cinc_logic.h"
 #include "motor_logic.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 TaskHandle_t check_sensors_handle;
 
