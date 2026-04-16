@@ -24,7 +24,7 @@ void check_sensors_task(void *pvParams)
             vTaskDelete(NULL);
         else if (read_sensors() == true && state == false)
         {
-            //read_position(group_num_sr, present_pos_read);
+            //read_position(group_num_sr, present_pos_read)
             sync_write_gposition(sw_group_nums[2], present_pos_read);
 
             profile_vel_sw[0] = MIN_VEL_ACC;
@@ -74,7 +74,7 @@ void create_check_sensors_task()
                                             NULL,
                                             2,                 
                                             &check_sensors_handle,
-                                            0                       // Stavljeno na CORE0 sa tajmerom
+                                            0                       
                                             );                     
 
     if (creation_result != pdPASS)

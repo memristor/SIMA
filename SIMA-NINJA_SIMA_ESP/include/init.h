@@ -12,6 +12,7 @@
 #define DXL_ID_CNT 2
 #define MOTOR_1_ID 1
 #define MOTOR_2_ID 2
+#define MOTOR_3_ID 3
 #define TX_EN_PIN GPIO_NUM_18
 
 #define OPMODE_ADDR 11
@@ -23,7 +24,7 @@
 #define GOAL_POS_ADDR 116
 #define PRESENT_POS_ADDR 132
 
-#define MAX_VEL 196
+#define MAX_VEL 208
 
 #define TAG_INIT "UART_INIT"
 

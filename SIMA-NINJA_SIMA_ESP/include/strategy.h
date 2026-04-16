@@ -3,7 +3,7 @@
 
 #include "stdbool.h"
 
-#define MAX_VEL_ACC 320
+#define MAX_VEL_ACC 256
 #define MIN_VEL_ACC 1
 
 extern volatile bool end_flag;

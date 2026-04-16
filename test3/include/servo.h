@@ -7,7 +7,7 @@
 #define SERVO_DUTY 2458
 #define SERVO_FREQ 50 // Hz
 #define CYCLE_STEP 14
-#define TOTAL_CYCLES 80
+#define TOTAL_CYCLES 60
 #define ITERATION_TIME 10 // ms
 
 void setup_servo();

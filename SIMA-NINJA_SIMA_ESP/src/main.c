@@ -10,27 +10,13 @@
 #include "sensor.h"
 #include "servo.h"
 #include "init.h"
+#include "pump.h"
 
 bool motors_enabled = false;
 bool motors_moving = false;
 
 void app_main() 
 {
-    //printf("UART/DXL port name: %s\n", getPortName(dxl_port_num));
-    //vTaskDelay(1000 / portTICK_PERIOD_MS);
-    //printf("UART/DXL set baudrate: %d\n", getBaudRate(dxl_port_num));
-
-    /*if (uart_get_baudrate(dxl_port_num, &esp_baudrate) != ESP_FAIL)
-    {
-        printf("Baudrate read successful: %ld\n", esp_baudrate);
-    }
-    else
-    {
-        printf("Baudrate read failed!\n");  
-    }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-    printf("Address of port in packetData: %p\n", packetData);*/
 
     init_strat();
     setup_sync();
@@ -38,9 +24,6 @@ void app_main()
     sensor_init();
     setup_servo();
     init_timer();
-
-    //printf("Velocity limit read 1: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_1_ID));
-    //printf("Velocity limit read 2: %ld\n", read_velocity_limit(dxl_port_num, MOTOR_2_ID));
     
     if (!read_position(group_num_sr, present_pos_read))
     {
@@ -62,45 +45,48 @@ void app_main()
     profile_vel_sw[1] = MAX_VEL_ACC;
 
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    set_profile_velocity(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/4);
    
-    profile_acc_sw[0] = MAX_VEL_ACC/8;
-    profile_acc_sw[1] = MAX_VEL_ACC/8;
+    profile_acc_sw[0] = MAX_VEL_ACC/20;
+    profile_acc_sw[1] = MAX_VEL_ACC/20;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-
-
+    set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
+    //setup_pump();
+    
     while (1)
     {
         
         check_led();
-
+        
         if (prev_cinc && cinc && !timer_on)
         {
             //printf("CINC pulled: Sending ENABLE signal");
             motors_enabled = true;
         }
         prev_cinc = cinc;
+        
 
         if (motors_enabled == true)
         {
             // Ovde bi se pozvao tajmer i proverila strategija po
             // kojoj bi se SIMA kretala
             start_timer();
+            
             motors_enabled = false;
         } 
 
         if (start_flag == true && motors_moving == false)
         {
             create_stop_motors_end_task();
-            create_check_sensors_task();
+            //create_check_sensors_task();
 
             check_strat();
 
             motors_moving = true;
         }
-        
-        vTaskDelay(20 / portTICK_PERIOD_MS);
 
-    }
-    
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+        
+    }   
 }

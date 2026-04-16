@@ -4,12 +4,16 @@
 #include "freertos/task.h"
 #include "math.h"
 
-#define WHEEL_DIAMETER_1_mm 83.497
-#define WHEEL_DIAMETER_2_mm 83.497
-#define WHEELS_DISTANCE_mm 110.86
+#define WHEEL_DIAMETER_1_mm 85
+#define WHEEL_DIAMETER_2_mm 85
+#define WHEELS_DISTANCE_mm 96
+#define WHEELS_DISTANCE_PUMP 192
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
+
+volatile uint8_t is_rotate = 0;
+volatile bool is_pump = false;
 
 void setupMotors() 
 {
@@ -21,11 +25,12 @@ void setupMotors()
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
         {
             motor_count++;
-            //printf("Motor id: %d", DXL_ID_LIST[i]);
+            printf("Motor id: %d", DXL_ID_LIST[i]);
         }
     }
     printf("Motor count: %d\n", motor_count);
     if (motor_count == DXL_ID_CNT)
+    
         printf("Motor connection established!\n");
     else
     {
@@ -38,6 +43,9 @@ void setupMotors()
 
     // Set operating mode for motor 2
     set_operating_mode(dxl_port_num, MOTOR_2_ID, OP_EXTENDED_POSITION);
+
+    // Pumpa 3 mod
+    set_operating_mode(dxl_port_num, MOTOR_3_ID, OP_POSITION);
     
     printf("Motors set to Extended Position Control Mode.\n");
 }
@@ -226,6 +234,21 @@ void set_goal_velocity(int port_num, uint8_t id, uint32_t goal_velocity)
     }
 }
 
+void set_profile_velocity(int port_num, uint8_t id, uint32_t profile_velocity)
+{
+    set_control_table(port_num, id, PROFILE_VEL_ADDR, profile_velocity, 4, 0);
+}
+
+void set_profile_acceleration(int port_num, uint8_t id, uint32_t profile_acc)
+{
+    set_control_table(port_num, id, PROFILE_ACC_ADDR, profile_acc, 4, 0);
+}
+
+void set_goal_position(int port_num, uint8_t id, uint32_t goal_position)
+{
+    set_control_table(port_num, id, GOAL_POS_ADDR, goal_position, 4, 0);
+}
+
 void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 {
     uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM_1);
@@ -233,6 +256,18 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
+
+    if (!is_rotate)
+    {
+        profile_vel_sw[0] = MAX_VEL/2;
+        profile_vel_sw[1] = MAX_VEL/2;
+        sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+        profile_acc_sw[0] = MAX_VEL / 8;
+        profile_acc_sw[1] = MAX_VEL / 8;
+        sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+    }
+    else
+        is_rotate = 0;
 
     read_position(group_num_sr, present_pos_read);
 
@@ -252,17 +287,30 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
       
 }
 
-void rotate_motors(double angle_deg)
+void rotate_motors(double angle_deg, bool is_pump)
 {
     double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);
+
+    if (is_pump)
+        arc_mm = WHEELS_DISTANCE_PUMP * (angle_deg * M_PI / 360);
+
+    is_rotate = 1;
+
+    profile_vel_sw[0] = MAX_VEL / 4;
+    profile_vel_sw[1] = MAX_VEL / 4;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    profile_acc_sw[0] = MAX_VEL / 4;
+    profile_acc_sw[1] = MAX_VEL / 4;
+    sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+    
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }
 
 void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_num)
 {
-    profile_vel_sw[0] = -MAX_VEL;
-    profile_vel_sw[1] =  MAX_VEL;
+    profile_vel_sw[0] = MAX_VEL;
+    profile_vel_sw[1] = MAX_VEL;
 
     sync_write_velocity(vel_group_sw_num, profile_vel_sw);
 
@@ -275,7 +323,7 @@ void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_
     {
         if (!read_position(pos_group_sr_num, present_pos_read))
             continue;
-        if ((goal_pos_sw[0] - present_pos_read[0]) > 20 || (goal_pos_sw[1] - present_pos_read[1]) > 20)
+        if ((goal_pos_sw[0] - present_pos_read[0]) <= 20 && (goal_pos_sw[1] - present_pos_read[1]) <= 20)
             break;
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }

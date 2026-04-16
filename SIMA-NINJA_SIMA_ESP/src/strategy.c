@@ -1,6 +1,7 @@
 #include "strategy.h"
 #include "servo.h"
 #include "motor_logic.h"
+#include "pump.h"
 
 #include "freertos/FreeRTOS.h"
 #include "FreeRTOSConfig.h"
@@ -40,7 +41,6 @@ void stop_motors_end(void *pvParams)
 
     while (true)
     {
-        printf("TestTestTest\n");
         xTaskDelayUntil(&xLastWakeTime, xFreq);
         //printf("STOP TASK\n");
 
@@ -121,36 +121,101 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    move_motors_mm(sw_group_nums[2], -1000, -1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], -1000, -1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], -1000, -1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], -1000, -1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], -1000, -1000);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2], 1000, 1000);
+    
+    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
+    // |
+    // |
+    // V
+    move_motors_mm(sw_group_nums[2], 350, 350);
+    rotate_motors(-25, false);
+    move_motors_mm(sw_group_nums[2], 50, 50);
+    rotate_motors(25, false);
+    move_motors_mm(sw_group_nums[2], 100, 100);
+    rotate_motors(-35, false);
+    move_motors_mm(sw_group_nums[2], 200, 200);
+    move_motors_mm(sw_group_nums[2], -30, -30);
+    // vTaskDelay(500/portTICK_PERIOD_MS);
+    rotate_motors(45, false);
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 80, 80);
+    rotate_motors(79, false);
+    move_motors_mm(sw_group_nums[2], 159, 159);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -405, -405);
+    rotate_motors(88, false);
+
+    // vTaskDelay(57000/portTICK_PERIOD_MS);
+    vTaskDelay(55000/portTICK_PERIOD_MS);
+    
+    move_motors_mm(sw_group_nums[2], -251, -251);
+    move_motors_mm(sw_group_nums[2], 210, 210);
+    rotate_motors(89, false);
+    move_motors_mm(sw_group_nums[2], -430, -430);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -235, -235);
+
+    
+    /*
+    //brkicev predlog
+    // |
+    // |
+    // V
+    move_motors_mm(sw_group_nums[2],-175, -175);
+    move_motors_mm(sw_group_nums[2],60, 60);
+    rotate_motors(40,false);
+    move_motors_mm(sw_group_nums[2],-90, -90);
+    move_motors_mm(sw_group_nums[2],40, 40);    
+    rotate_motors(40,false);
+    move_motors_mm(sw_group_nums[2],-450, -450);
+    */
 }
 
 void SIMA_N_BLUE()
-{
+{   
+    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
+    // |
+    // |
+    // V
+    move_motors_mm(sw_group_nums[2], 350, 350);
+    rotate_motors(25, false);
+    move_motors_mm(sw_group_nums[2], 50, 50);
+    rotate_motors(-25, false);
+    move_motors_mm(sw_group_nums[2], 100, 100);
+    rotate_motors(35, false);
+    move_motors_mm(sw_group_nums[2], 200, 200);
+    move_motors_mm(sw_group_nums[2], -30, -30);
 
-    move_motors_mm(sw_group_nums[2], 440, 440);
-    rotate_motors(-135);
-    move_motors_mm(sw_group_nums[2], 70, 70);
-    rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], 415, 415);
+    // vTaskDelay(500/portTICK_PERIOD_MS);
+    
+    rotate_motors(-45, false);
+    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], 80, 80);
+    rotate_motors(-79, false);
+    move_motors_mm(sw_group_nums[2], 159, 159);
+    rotate_motors(88, false);
+    move_motors_mm(sw_group_nums[2], -405, -405);
+    rotate_motors(-86, false);
 
+    // vTaskDelay(57000/portTICK_PERIOD_MS);
+    vTaskDelay(55000/portTICK_PERIOD_MS);
+    
+    move_motors_mm(sw_group_nums[2], -251, -251);
+    move_motors_mm(sw_group_nums[2], 210, 210);
+    rotate_motors(-89, false);
+    move_motors_mm(sw_group_nums[2], -430, -430);
+    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -235, -235);
+
+    //brkicev predlog
+    // |
+    // |
+    // V
+    /*
+    move_motors_mm(sw_group_nums[2],-160, -160);
+    move_motors_mm(sw_group_nums[2],30, 30);
+    rotate_motors(80,false);
+    move_motors_mm(sw_group_nums[2],-450, -450);
+   */
 }
 
 
