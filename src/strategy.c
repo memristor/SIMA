@@ -122,7 +122,7 @@ void shut_motors_off()
 void SIMA_N_YELLOW()
 {
     
-    //ovo je kod za guranje - crne smetaju
+    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
     // |
     // |
     // V
@@ -138,23 +138,19 @@ void SIMA_N_YELLOW()
     rotate_motors(45, false);
     move_motors_mm(sw_group_nums[2], -260, -260);
     move_motors_mm(sw_group_nums[2], 80, 80);
-    rotate_motors(80, false);
-    move_motors_mm(sw_group_nums[2], 150, 150);
-    rotate_motors(-87, false);
+    rotate_motors(79, false);
+    move_motors_mm(sw_group_nums[2], 159, 159);
+    rotate_motors(-88, false);
     move_motors_mm(sw_group_nums[2], -420, -420);
-    rotate_motors(90, false);
-    vTaskDelay(55000/portTICK_PERIOD_MS);
+    rotate_motors(86, false);
+    vTaskDelay(5000/portTICK_PERIOD_MS);
     
-    move_motors_mm(sw_group_nums[2], -260, -260);
-    move_motors_mm(sw_group_nums[2], 240, 240);
-    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -251, -251);
+    move_motors_mm(sw_group_nums[2], 210, 210);
+    rotate_motors(89, false);
     move_motors_mm(sw_group_nums[2], -430, -430);
     rotate_motors(-90, false);
-    move_motors_mm(sw_group_nums[2], -265, -265);
-
-    while(1){
-                move_motor();
-    }
+    move_motors_mm(sw_group_nums[2], -250, -250);
 
     
     /*
@@ -224,7 +220,7 @@ void SIMA_N_YELLOW()
 
 void SIMA_N_BLUE()
 {   
-    //ovo je kod za guranje - crne smetaju
+    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
     // |
     // |
     // V
@@ -240,19 +236,19 @@ void SIMA_N_BLUE()
     rotate_motors(-45, false);
     move_motors_mm(sw_group_nums[2], -260, -260);
     move_motors_mm(sw_group_nums[2], 80, 80);
-    rotate_motors(-80, false);
-    move_motors_mm(sw_group_nums[2], 150, 150);
-    rotate_motors(87, false);
+    rotate_motors(-79.5, false);
+    move_motors_mm(sw_group_nums[2], 160, 160);
+    rotate_motors(91, false);
     move_motors_mm(sw_group_nums[2], -420, -420);
     rotate_motors(-90, false);
-    vTaskDelay(55000/portTICK_PERIOD_MS);
+    vTaskDelay(5000/portTICK_PERIOD_MS);
     
-    move_motors_mm(sw_group_nums[2], -260, -260);
-    move_motors_mm(sw_group_nums[2], 240, 240);
-    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -255, -255);
+    move_motors_mm(sw_group_nums[2], 210, 210);
+    rotate_motors(-89, false);
     move_motors_mm(sw_group_nums[2], -430, -430);
     rotate_motors(90, false);
-    move_motors_mm(sw_group_nums[2], -265, -265);
+    move_motors_mm(sw_group_nums[2], -260, -260);
 
     while(1){
                 move_motor();
@@ -262,11 +258,12 @@ void SIMA_N_BLUE()
     // |
     // |
     // V
+    /*
     move_motors_mm(sw_group_nums[2],-160, -160);
     move_motors_mm(sw_group_nums[2],30, 30);
     rotate_motors(80,false);
     move_motors_mm(sw_group_nums[2],-450, -450);
-   
+   */
 
 
 
