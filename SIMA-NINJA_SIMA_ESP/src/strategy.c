@@ -169,6 +169,15 @@ void SIMA_N_YELLOW()
     rotate_motors(-90, false);
     move_motors_mm(sw_group_nums[2], -100, -100);
 
+    // Ovo ispod move 65 zakomentarisati ako se igra
+    // protiv +381 ili NTS jaceg tima
+    // i otkomentarisati ovo dole
+
+    /*
+    rotate_motors(73, false);
+    move_motos_mm(sw_group_nums[2], -450, -450);
+    */
+
 
     
     /*
@@ -228,7 +237,7 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], -110, -110);
     rotate_motors(90, false);
 
-    vTaskDelay(60000/portTICK_PERIOD_MS);
+    vTaskDelay(60000/portTICK_PERIOD_MS);   // 60000
 
     move_motors_mm(sw_group_nums[2], -265, -265);
     move_motors_mm(sw_group_nums[2], 65, 65);
@@ -237,7 +246,17 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], 70, 70);
     rotate_motors(90, false);
     move_motors_mm(sw_group_nums[2], -100, -100);
+    
 
+    // Ovo ispod move 65 zakomentarisati ako se igra
+    // protiv +381 ili NTS jaceg tima
+    // i otkomentarisati ovo dole
+
+    /*
+    rotate_motors(-73, false);
+    move_motors_mm(sw_group_nums[2], -450, -450);
+    */
+    
 
 
     //brkicev predlog
