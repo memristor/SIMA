@@ -121,7 +121,7 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
-    
+    /*
     //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
     // |
     // |
@@ -153,6 +153,22 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], -430, -430);
     rotate_motors(-90, false);
     move_motors_mm(sw_group_nums[2], -235, -235);
+    */
+
+    //safe opcija za NINJU
+    move_motors_mm(sw_group_nums[2], -110, -110);
+    rotate_motors(-90, false);
+
+    vTaskDelay(60000/portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -265, -265);
+    move_motors_mm(sw_group_nums[2], 65, 65);
+    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -490, -490);
+    move_motors_mm(sw_group_nums[2], 70, 70);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -100, -100);
+
 
     
     /*
@@ -172,6 +188,7 @@ void SIMA_N_YELLOW()
 
 void SIMA_N_BLUE()
 {   
+    /*
     //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
     // |
     // |
@@ -205,6 +222,23 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], -430, -430);
     rotate_motors(90, false);
     move_motors_mm(sw_group_nums[2], -235, -235);
+    */
+
+    //safe opcija za NINJU
+    move_motors_mm(sw_group_nums[2], -110, -110);
+    rotate_motors(90, false);
+
+    vTaskDelay(60000/portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -265, -265);
+    move_motors_mm(sw_group_nums[2], 65, 65);
+    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -490, -490);
+    move_motors_mm(sw_group_nums[2], 70, 70);
+    rotate_motors(90, false);
+    move_motors_mm(sw_group_nums[2], -100, -100);
+
+
 
     //brkicev predlog
     // |
