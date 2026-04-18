@@ -159,7 +159,11 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], -110, -110);
     rotate_motors(-90, false);
 
+    //za non-aggressive
     vTaskDelay(60000/portTICK_PERIOD_MS);
+
+    //za metlicu
+    //vTaskDelay(68000/portTICK_PERIOD_MS);
 
     move_motors_mm(sw_group_nums[2], -265, -265);
     move_motors_mm(sw_group_nums[2], 65, 65);
@@ -167,23 +171,18 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], -490, -490);
     move_motors_mm(sw_group_nums[2], 70, 70);
     rotate_motors(-90, false);
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -85, -85);
 
-
+    //linije ispod move 65, 65 zakomentarisati
+    //i ako igramo protiv +381 ili nts narandzastih sima 
+    //otkomentarisati sledece:
     
     /*
-    //brkicev predlog
-    // |
-    // |
-    // V
-    move_motors_mm(sw_group_nums[2],-175, -175);
-    move_motors_mm(sw_group_nums[2],60, 60);
-    rotate_motors(40,false);
-    move_motors_mm(sw_group_nums[2],-90, -90);
-    move_motors_mm(sw_group_nums[2],40, 40);    
-    rotate_motors(40,false);
-    move_motors_mm(sw_group_nums[2],-450, -450);
+    rotate_motors(73, false);
+    move_motors_mm(sw_group_nums[2], -450, -450)
     */
+
+
 }
 
 void SIMA_N_BLUE()
@@ -228,7 +227,11 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], -110, -110);
     rotate_motors(90, false);
 
+    //za non-aggressive
     vTaskDelay(60000/portTICK_PERIOD_MS);
+
+    //za metlicu
+    //vTaskDelay(68000/portTICK_PERIOD_MS);
 
     move_motors_mm(sw_group_nums[2], -265, -265);
     move_motors_mm(sw_group_nums[2], 65, 65);
@@ -236,20 +239,18 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], -490, -490);
     move_motors_mm(sw_group_nums[2], 70, 70);
     rotate_motors(90, false);
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -85, -85);
 
-
-
-    //brkicev predlog
-    // |
-    // |
-    // V
+    //linije ispod move 65, 65 zakomentarisati
+    //i ako igramo protiv +381 ili nts narandzastih sima 
+    //otkomentarisati sledece:
+    
     /*
-    move_motors_mm(sw_group_nums[2],-160, -160);
-    move_motors_mm(sw_group_nums[2],30, 30);
-    rotate_motors(80,false);
-    move_motors_mm(sw_group_nums[2],-450, -450);
-   */
+    rotate_motors(73, false);
+    move_motors_mm(sw_group_nums[2], -450, -450)
+    */
+
+
 }
 
 
