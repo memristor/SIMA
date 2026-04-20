@@ -13,7 +13,7 @@
 #include "semaphores.h"
 #include "led.h"
 
-//bool motors_enabled = false;
+bool motors_enabled = false;
 bool motors_moving = false;
 SemaphoreHandle_t cincSemaphore, startSemaphore;
 

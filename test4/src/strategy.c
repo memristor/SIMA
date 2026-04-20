@@ -106,18 +106,7 @@ void create_stop_motors_end_task()
 
 void shut_motors_off()
 {
-    goal_pos_sw[0] = present_pos_read[0];
-    goal_pos_sw[1] = present_pos_read[1];
-    sync_write_gposition(sw_group_nums[2], goal_pos_sw);
-
-    //profile_vel_sw[0] = MIN_VEL_ACC;
-    //profile_vel_sw[1] = MIN_VEL_ACC;
-    //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-
-    //set_torque_enable(dxl_port_num, MOTOR_1_ID, false);
-    //vTaskDelay(10 / portTICK_PERIOD_MS);
-    //set_torque_enable(dxl_port_num, MOTOR_2_ID, false);
-    //vTaskDelay(10 / portTICK_PERIOD_MS);
+    sync_write_gposition(sw_group_nums[2], present_pos_read);
 }
 
 void SIMA_N_YELLOW()

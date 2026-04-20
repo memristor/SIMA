@@ -54,7 +54,6 @@ void app_main()
     {
         
         check_led();
-
         if (prev_cinc && cinc && !timer_on)
         {
             //printf("CINC pulled: Sending ENABLE signal");
