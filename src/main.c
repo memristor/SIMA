@@ -15,6 +15,7 @@
 bool motors_enabled = false;
 bool motors_moving = false;
 
+
 void app_main() 
 {
 
@@ -52,7 +53,9 @@ void app_main()
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     set_profile_acceleration(dxl_port_num, MOTOR_3_ID, MAX_VEL_ACC/20);
-    //setup_pump();
+
+    // prep pump
+    setup_pump();
     
     while (1)
     {

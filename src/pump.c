@@ -9,43 +9,57 @@
 uint32_t pump_motor_pos = HIGHEST_POSITION;
 uint32_t pump_motor_gpos = HIGHEST_POSITION; 
 
+
 void setup_pump(void)
 {
     gpio_reset_pin(PUMP_PIN);
     gpio_set_direction(PUMP_PIN, GPIO_MODE_OUTPUT);
     gpio_set_level(PUMP_PIN, false);
 
-    set_goal_position(dxl_port_num, MOTOR_3_ID, HIGHEST_POSITION);
+    prep_pump();
 }
 
-void rotate_pump(double angle)
+void prep_pump(void)
 {
-    //double arc_mm = 2 * PUMP_ARC_RADI_mm * (angle * (M_PI / 360));
-    uint32_t offset = 4095 * (angle / 360);
+    pump_motor_gpos = BAR_PICKUP_POSITION;
+    set_goal_position(dxl_port_num, MOTOR_3_ID, pump_motor_gpos); // prep for bar pickup
 
-    pump_motor_pos = read_profile_gposition(dxl_port_num, MOTOR_3_ID);
-    pump_motor_gpos = pump_motor_pos - offset;
+    do
+    {   
+        pump_motor_pos = read_present_position(dxl_port_num, MOTOR_3_ID);
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+    } while (abs((int)(pump_motor_gpos - pump_motor_pos)) > 20);
+}
 
-    if (pump_motor_gpos > HIGHEST_POSITION)
-        pump_motor_pos = HIGHEST_POSITION;
-    else if (pump_motor_gpos < LOWEST_POSITION)
-        pump_motor_gpos = LOWEST_POSITION;
-    
+
+void pick_up_bar(void)
+{
+    gpio_set_level(PUMP_PIN, true);
+
+    pump_motor_pos = read_present_position(dxl_port_num, MOTOR_3_ID);
+    pump_motor_gpos = pump_motor_pos - 250; // lower the pump a bit more to ensure touching the bar 
+
     set_goal_position(dxl_port_num, MOTOR_3_ID, pump_motor_gpos);
 
     do
     {
-        pump_motor_pos = read_profile_gposition(dxl_port_num, MOTOR_3_ID);
+        pump_motor_pos = read_present_position(dxl_port_num, MOTOR_3_ID);
         vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while (abs(pump_motor_gpos - pump_motor_pos) > 20);
+    } while (abs((int)(pump_motor_gpos - pump_motor_pos)) > 20);
+
+    vTaskDelay(750 / portTICK_PERIOD_MS); // make sure bar is picked up
+
+    pump_motor_gpos = HIGHEST_POSITION; // max val to prep for going over edge
+    set_goal_position(dxl_port_num, MOTOR_3_ID, pump_motor_gpos);
+
+    do
+    {
+        pump_motor_pos = read_present_position(dxl_port_num, MOTOR_3_ID);
+        vTaskDelay(20 / portTICK_PERIOD_MS);
+    } while (abs((int)(pump_motor_gpos - pump_motor_pos)) > 20);
 }
 
-void pick_up_bar()
+void release_bar(void)
 {
-    gpio_set_level(PUMP_PIN, true);
-}
-
-void release_bar()
-{
-    gpio_set_level(PUMP_PIN, false);
+    gpio_set_level(PUMP_PIN, false); 
 }

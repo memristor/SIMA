@@ -22,10 +22,9 @@
 #define PROFILE_ACC_ADDR 108
 #define PROFILE_VEL_ADDR 112
 #define GOAL_POS_ADDR 116
+#define MOVING_STATUS_ADDR 123
 #define PRESENT_POS_ADDR 132
-
 #define MAX_VEL 256
-
 #define TAG_INIT "UART_INIT"
 
 typedef enum OperatingMode{

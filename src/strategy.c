@@ -108,15 +108,6 @@ void shut_motors_off()
     goal_pos_sw[0] = present_pos_read[0];
     goal_pos_sw[1] = present_pos_read[1];
     sync_write_gposition(sw_group_nums[2], goal_pos_sw);
-
-    //profile_vel_sw[0] = MIN_VEL_ACC;
-    //profile_vel_sw[1] = MIN_VEL_ACC;
-    //sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-
-    //set_torque_enable(dxl_port_num, MOTOR_1_ID, false);
-    //vTaskDelay(10 / portTICK_PERIOD_MS);
-    //set_torque_enable(dxl_port_num, MOTOR_2_ID, false);
-    //vTaskDelay(10 / portTICK_PERIOD_MS);
 }
 
 void SIMA_N_YELLOW()
@@ -224,35 +215,42 @@ void SIMA_N_BLUE()
     // |
     // |
     // V
-    move_motors_mm(sw_group_nums[2], 350, 350);
-    rotate_motors(25, false);
-    move_motors_mm(sw_group_nums[2], 50, 50);
-    rotate_motors(-25, false);
-    move_motors_mm(sw_group_nums[2], 100, 100);
-    rotate_motors(35, false);
-    move_motors_mm(sw_group_nums[2], 200, 200);
-    move_motors_mm(sw_group_nums[2], -30, -30);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    rotate_motors(-45, false);
-    move_motors_mm(sw_group_nums[2], -260, -260);
-    move_motors_mm(sw_group_nums[2], 80, 80);
-    rotate_motors(-79.5, false);
-    move_motors_mm(sw_group_nums[2], 160, 160);
-    rotate_motors(91, false);
-    move_motors_mm(sw_group_nums[2], -420, -420);
-    rotate_motors(-90, false);
-    vTaskDelay(5000/portTICK_PERIOD_MS);
-    
-    move_motors_mm(sw_group_nums[2], -255, -255);
-    move_motors_mm(sw_group_nums[2], 210, 210);
-    rotate_motors(-89, false);
-    move_motors_mm(sw_group_nums[2], -430, -430);
-    rotate_motors(90, false);
-    move_motors_mm(sw_group_nums[2], -260, -260);
 
-    while(1){
-                move_motor();
-    }
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -40, -40);
+
+    pick_up_bar();
+
+    move_motors_mm(sw_group_nums[2], -250, -250);
+
+    release_bar();
+
+
+    
+    // move_motors_mm(sw_group_nums[2], 50, 50);
+    // rotate_motors(-25, false);
+    // move_motors_mm(sw_group_nums[2], 100, 100);
+    // rotate_motors(35, false);
+    // move_motors_mm(sw_group_nums[2], 200, 200);
+    // move_motors_mm(sw_group_nums[2], -30, -30);
+    // vTaskDelay(500/portTICK_PERIOD_MS);
+    // rotate_motors(-45, false);
+    // move_motors_mm(sw_group_nums[2], -260, -260);
+    // move_motors_mm(sw_group_nums[2], 80, 80);
+    // rotate_motors(-79.5, false);
+    // move_motors_mm(sw_group_nums[2], 160, 160);
+    // rotate_motors(91, false);
+    // move_motors_mm(sw_group_nums[2], -420, -420);
+    // rotate_motors(-90, false);
+    // vTaskDelay(5000/portTICK_PERIOD_MS);
+    
+    // move_motors_mm(sw_group_nums[2], -255, -255);
+    // move_motors_mm(sw_group_nums[2], 210, 210);
+    // rotate_motors(-89, false);
+    // move_motors_mm(sw_group_nums[2], -430, -430);
+    // rotate_motors(90, false);
+    // move_motors_mm(sw_group_nums[2], -260, -260);
 
     //brkicev predlog
     // |

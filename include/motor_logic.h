@@ -2,6 +2,9 @@
 #define MOTOR_LOGIC_H
 #include "init.h"
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+
 void setupMotors();
 void sync_write_velocity(int group_num, uint32_t *velocity_data);
 void sync_write_acceleration(int group_num, uint32_t *acceleration_data);
@@ -21,5 +24,10 @@ uint32_t read_velocity_limit(int port_num, uint8_t id);
 uint32_t read_profile_velocity(int port_num, uint8_t id);
 uint32_t read_profile_acceleration(int port_num, uint8_t id);
 uint32_t read_profile_gposition(int port_num, uint8_t id);
+uint32_t read_present_position(int port_num, uint8_t id);
+
+bool read_moving_status(int port_num, uint8_t id, uint8_t *out_status);
+
+extern SemaphoreHandle_t motor_mutex;
 
 #endif
