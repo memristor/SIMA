@@ -4,9 +4,9 @@
 #include "freertos/task.h"
 #include "math.h"
 
-#define WHEEL_DIAMETER_1_mm 85
-#define WHEEL_DIAMETER_2_mm 85
-#define WHEELS_DISTANCE_mm 96
+#define WHEEL_DIAMETER_1_mm 55.25
+#define WHEEL_DIAMETER_2_mm 55.25
+#define WHEELS_DISTANCE_mm 145.8
 #define WHEELS_DISTANCE_PUMP 192
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
@@ -256,18 +256,19 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
-
+    /*
     if (!is_rotate)
     {
-        profile_vel_sw[0] = MAX_VEL/2;
-        profile_vel_sw[1] = MAX_VEL/2;
+        profile_vel_sw[0] = MAX_VEL / 2;
+        profile_vel_sw[1] = MAX_VEL / 2;
         sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-        profile_acc_sw[0] = MAX_VEL / 8;
-        profile_acc_sw[1] = MAX_VEL / 8;
-        sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+        profile_acc_sw[0] = MAX_VEL / 16;
+        profile_acc_sw[1] = MAX_VEL / 16;
+        sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     }
     else
         is_rotate = 0;
+    */
 
     read_position(group_num_sr, present_pos_read);
 
@@ -299,9 +300,9 @@ void rotate_motors(double angle_deg, bool is_pump)
     profile_vel_sw[0] = MAX_VEL / 4;
     profile_vel_sw[1] = MAX_VEL / 4;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-    profile_acc_sw[0] = MAX_VEL / 4;
-    profile_acc_sw[1] = MAX_VEL / 4;
-    sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+    profile_acc_sw[0] = MAX_VEL / 16;
+    profile_acc_sw[1] = MAX_VEL / 16;
+    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
     
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);

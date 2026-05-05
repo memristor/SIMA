@@ -228,8 +228,8 @@ void set_goal_velocity(int port_num, uint8_t id, uint32_t goal_velocity)
 
 void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 {
-    uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM_1);
-    uint32_t offset2 = (uint32_t) (mm2 * TICKS_PER_MM_2);
+    uint32_t offset1 = (uint32_t) roundf(mm1 * TICKS_PER_MM_1);
+    uint32_t offset2 = (uint32_t) roundf(mm2 * TICKS_PER_MM_2);
 
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
