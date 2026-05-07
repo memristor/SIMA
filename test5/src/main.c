@@ -67,17 +67,10 @@ void app_main()
     profile_acc_sw[1] = MAX_VEL_ACC / 10;
 
     sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-    //move_motors_mm(sw_group_nums[2], 2000, 2000);
-    for (int8_t i = 5; i > 0; i--)
-    {
-        move_motors_mm(sw_group_nums[2], 1000, 1000);
-        move_motors_mm(sw_group_nums[2], -1000, -1000);
-    }
-
 
     while (1)
     {
-        /*
+        
         check_led();
 
         if (prev_cinc && cinc && !timer_on)
@@ -104,7 +97,7 @@ void app_main()
 
             motors_moving = true;
         }
-        */
+        
         vTaskDelay(20 / portTICK_PERIOD_MS);
 
     }
