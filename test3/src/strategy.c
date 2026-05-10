@@ -110,11 +110,14 @@ void shut_motors_off()
 void
  SIMA_N_YELLOW()
 {
-    move_motors_mm(sw_group_nums[2], -350, -350);
-    rotate_motors(45);
-    move_motors_mm(sw_group_nums[2], -707, -707);
-    rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], -40, -40);
+    move_motors_mm(sw_group_nums[2], -600, -600);
+    rotate_motors(59);
+    move_motors_mm(sw_group_nums[2], -583.1, -583.1);
+    //move_motors_mm(sw_group_nums[2], -350, -350);
+    //rotate_motors(45);
+    //move_motors_mm(sw_group_nums[2], -707, -707);
+    //rotate_motors(-45);
+    //move_motors_mm(sw_group_nums[2], -40, -40);
     // PROTIV u, umesto ove iznad, nakon -45 rot
     //move_motors_mm(sw_group_nums[2], -100, -100);
     //rotate_motors(90);
@@ -123,11 +126,14 @@ void
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], -350, -350);
-    rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], -707, -707);
-    rotate_motors(45);
-    move_motors_mm(sw_group_nums[2], -40, -40);
+    move_motors_mm(sw_group_nums[2], -600, -600);
+    rotate_motors(-59);
+    move_motors_mm(sw_group_nums[2], -583.1, -583.1);
+    //move_motors_mm(sw_group_nums[2], -350, -350);
+    //rotate_motors(-45);
+    //move_motors_mm(sw_group_nums[2], -707, -707);
+    //rotate_motors(45);
+    //move_motors_mm(sw_group_nums[2], -40, -40);
     // PROTIV u, umesto ove iznad, nakon 45 rot
     //move_motors_mm(sw_group_nums[2], -150, -150);
     //rotate_motors(-90);

@@ -115,7 +115,7 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], 869, 869); // bilo 1000
     rotate_motors(-37);
     vTaskDelete(check_sensors_handle);
-    move_motors_mm(sw_group_nums[2], 360, 360);
+    move_motors_mm(sw_group_nums[2], 362, 362);
 }
 
 void SIMA_N_BLUE()
@@ -125,7 +125,7 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], 869, 869);
     rotate_motors(37);
     vTaskDelete(check_sensors_handle);
-    move_motors_mm(sw_group_nums[2], 360, 360);
+    move_motors_mm(sw_group_nums[2], 362, 362);
 }
 
 
