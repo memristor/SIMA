@@ -24,7 +24,7 @@
 #define GOAL_POS_ADDR 116
 #define MOVING_STATUS_ADDR 123
 #define PRESENT_POS_ADDR 132
-#define MAX_VEL 256
+#define MAX_VEL 1024 // opseg od 0 - 1023
 #define TAG_INIT "UART_INIT"
 
 typedef enum OperatingMode{

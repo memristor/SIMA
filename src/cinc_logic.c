@@ -6,6 +6,8 @@ bool prev_cinc = false;
 bool cinc      = false;
 bool strat     = false;
 
+strategy_t strategy = HOMOLOGACIJA; // HOMOLOGACIJA, BARS_3, NO_BARS, BARS_2
+
 void init_strat()
 {
     gpio_reset_pin(YELLOW_PIN);
@@ -22,7 +24,6 @@ void init_strat()
     gpio_input_enable(CINC_PIN);
     gpio_input_enable(STRAT_PIN);
 
-    //gpio_pullup_dis(CINC_PIN);
 
     gpio_set_pull_mode(STRAT_PIN, GPIO_PULLUP_ONLY);
     gpio_pullup_en(STRAT_PIN);
@@ -67,11 +68,37 @@ void check_strat()
 
     if (strat)
     {
-            SIMA_N_BLUE();
+        switch(strategy){
+        case BARS_3:
+            SIMA_N_BLUE1();
+            break;
+        case BARS_2:
+            SIMA_N_BLUE2();
+            break;  
+        case NO_BARS:
+            SIMA_N_BLUE_NO_BARS();
+            break;
+        case HOMOLOGACIJA:
+            SIMA_N_HOMOLOGACIJA();
+            break;
+        }
     }
     else 
     {
-            SIMA_N_YELLOW();
+        switch(strategy){
+        case BARS_3:
+            SIMA_N_YELLOW1();
+            break;
+        case BARS_2:
+            SIMA_N_YELLOW2();
+            break;  
+        case NO_BARS:
+            SIMA_N_YELLOW_NO_BARS();
+            break;
+        case HOMOLOGACIJA:
+            SIMA_N_HOMOLOGACIJA();
+            break;
+        }
     }
 }
 

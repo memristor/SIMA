@@ -9,26 +9,11 @@
 TaskHandle_t check_flag_handle;
 TaskHandle_t stop_motors_handle;
 
-//Check SE FLAG SE MOZE IZBACITI A DA SE U MAIN UBACI POKRETANJE SERVA NA END_FLAG?
 // continuous task
 void move_servo_task(void *pvParams)
 {
-    //BaseType_t freeSpace = uxTaskGetStackHighWaterMark(check_flag_handle);
-
-    //const TickType_t xFreq = pdMS_TO_TICKS(20);
-
-    //TickType_t xLastWakeTime = xTaskGetTickCount();
-
     while (true)
     {
-        //xTaskDelayUntil(&xLastWakeTime, xFreq);
-        //printf("CHECK TASK\n");
-
-        //printf("Free space left: %d\n", freeSpace);
-
-        /*printf("Task is running on core: ");
-        printf("%d\n", xPortGetCoreID());*/
-
         move_motor();
     }
 }
@@ -42,9 +27,7 @@ void stop_motors_end(void *pvParams)
     while (true)
     {
         xTaskDelayUntil(&xLastWakeTime, xFreq);
-        //printf("STOP TASK\n");
 
-        //vTaskDelay(10 / portTICK_PERIOD_MS);
         if (end_flag == true)
         {
             shut_motors_off();
@@ -67,7 +50,7 @@ void create_move_servo_task()
                                             2,                 
                                             &check_flag_handle,
                                             1                       // Stavljeno na CORE1 sa tajmerom
-                                            );                      // (izmedju tajmera koji je evenet task je provera)
+                                            );                      // (izmedju tajmera koji je event task je provera)
 
     if (creation_result != pdPASS)
     {
@@ -110,210 +93,699 @@ void shut_motors_off()
     sync_write_gposition(sw_group_nums[2], goal_pos_sw);
 }
 
-void SIMA_N_YELLOW()
-{
-    
-    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
-    // |
-    // |
-    // V
-    move_motors_mm(sw_group_nums[2], 350, 350);
-    rotate_motors(-25, false);
-    move_motors_mm(sw_group_nums[2], 50, 50);
-    rotate_motors(25, false);
-    move_motors_mm(sw_group_nums[2], 100, 100);
-    rotate_motors(-35, false);
+void SIMA_N_YELLOW2()
+{ 
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -175, -175);
+
+    move_motors_mm(sw_group_nums[2], 60, 60);
+
+    rotate_motors(90, false);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], -120, -120);
+
+    rotate_motors(-45, false);
+
+    move_motors_mm(sw_group_nums[2], -80, -80);
+
+    rotate_motors(5, false);
+
+    move_motors_mm(sw_group_nums[2], -50, -50);
+
+    move_motors_mm(sw_group_nums[2], 15, 15);
+
+    pick_up_bar(true);
+
+    rotate_motors(-50, false);
+
+    move_motors_mm(sw_group_nums[2], 300, 300);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(-91, false);
+
+    move_motors_mm(sw_group_nums[2], -350, -350);
+
+    // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(50);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(-50, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    //////////////////////////////////////////////////////
+
+    move_motors_mm(sw_group_nums[2], 250, 250);
+
+    rotate_motors(90, false);
+
+    prep_pump();
+
     move_motors_mm(sw_group_nums[2], 200, 200);
-    move_motors_mm(sw_group_nums[2], -30, -30);
-    vTaskDelay(500/portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
     rotate_motors(45, false);
-    move_motors_mm(sw_group_nums[2], -260, -260);
-    move_motors_mm(sw_group_nums[2], 80, 80);
-    rotate_motors(79, false);
-    move_motors_mm(sw_group_nums[2], 159, 159);
-    rotate_motors(-88, false);
-    move_motors_mm(sw_group_nums[2], -420, -420);
-    rotate_motors(86, false);
-    vTaskDelay(5000/portTICK_PERIOD_MS);
-    
-    move_motors_mm(sw_group_nums[2], -251, -251);
-    move_motors_mm(sw_group_nums[2], 210, 210);
-    rotate_motors(89, false);
-    move_motors_mm(sw_group_nums[2], -430, -430);
-    rotate_motors(-90, false);
-    move_motors_mm(sw_group_nums[2], -250, -250);
 
-    
-    /*
-    //brkicev predlog
-    // |
-    // |
-    // V
-    move_motors_mm(sw_group_nums[2],-175, -175);
-    move_motors_mm(sw_group_nums[2],60, 60);
-    rotate_motors(40,false);
-    move_motors_mm(sw_group_nums[2],-90, -90);
-    move_motors_mm(sw_group_nums[2],40, 40);    
-    rotate_motors(40,false);
-    move_motors_mm(sw_group_nums[2],-450, -450);
-    */
+    move_motors_mm(sw_group_nums[2], -220, -220);
 
-    //ovo je kod za kupljenje pumpom
-    // |
-    // |
-    // V
-    /*
-    rotate_motors(-15, false);
-    move_motors_mm(sw_group_nums[2],-160, -160);
     rotate_motors(15, false);
-    move_motors_mm(sw_group_nums[2],-262, -262);
-    pick_up_bar();
-    rotate_pump(90);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_pump(-90);
-    //razlika u pumpi od pocetne pozicije -18
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2],50, 50);
-    rotate_motors(15, true);
-    move_motors_mm(sw_group_nums[2],65, 65);
-    rotate_motors(-15, true);
-    move_motors_mm(sw_group_nums[2],285, 285);
-    rotate_motors(90, true);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    release_bar();
-    move_motors_mm(sw_group_nums[2], 20, 20);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    rotate_motors(-90, false);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    //zavrsio ostavljanje prve daske
-    move_motors_mm(sw_group_nums[2],-470, -470);
-    pick_up_bar();
-    rotate_pump(90);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_pump(-90);
-    //razlika u pumpi od pocetne pozicije 0
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_motors(-15, true);
-    move_motors_mm(sw_group_nums[2],50, 50);
-    rotate_motors(15, true);
-    move_motors_mm(sw_group_nums[2],400, 400);
-    rotate_motors(-90, true);
-    release_bar();
-    rotate_motors(75, false);
-    move_motors_mm(sw_group_nums[2],-650, -650);
-    rotate_motors(-6.5, false);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2],610, 610);
-    rotate_motors(100, false);
-    */
 
-}
+    move_motors_mm(sw_group_nums[2], -20, -20);
 
-void SIMA_N_BLUE()
-{   
-    //ovo je kod za guranje - STO NA KOM JE VELIKI PROKLIZAVAO (onaj dalje od naseg ormana)
-    // |
-    // |
-    // V
+    move_motors_mm(sw_group_nums[2], 10, 10);
 
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
+    pick_up_bar(true);
+
+    rotate_motors(-55, false);
+
+    move_motors_mm(sw_group_nums[2], 290, 290);
+
+    move_motors_mm(sw_group_nums[2], -70, -70);
+
+    rotate_motors(-87, false);
+
+    move_motors_mm(sw_group_nums[2], -500, -500);
+
+     // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(-50);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(50, false);
 
     move_motors_mm(sw_group_nums[2], -40, -40);
 
-    pick_up_bar();
+    move_motors_mm(sw_group_nums[2], 300, 300);
 
-    move_motors_mm(sw_group_nums[2], -250, -250);
+    rotate_motors(90, false);
 
-    release_bar();
+    move_motors_mm(sw_group_nums[2], 150, 150);
 
+    move_motors_mm(sw_group_nums[2], -170, -170);
 
-    
-    // move_motors_mm(sw_group_nums[2], 50, 50);
-    // rotate_motors(-25, false);
-    // move_motors_mm(sw_group_nums[2], 100, 100);
-    // rotate_motors(35, false);
-    // move_motors_mm(sw_group_nums[2], 200, 200);
-    // move_motors_mm(sw_group_nums[2], -30, -30);
-    // vTaskDelay(500/portTICK_PERIOD_MS);
-    // rotate_motors(-45, false);
-    // move_motors_mm(sw_group_nums[2], -260, -260);
-    // move_motors_mm(sw_group_nums[2], 80, 80);
-    // rotate_motors(-79.5, false);
-    // move_motors_mm(sw_group_nums[2], 160, 160);
-    // rotate_motors(91, false);
-    // move_motors_mm(sw_group_nums[2], -420, -420);
-    // rotate_motors(-90, false);
-    // vTaskDelay(5000/portTICK_PERIOD_MS);
-    
-    // move_motors_mm(sw_group_nums[2], -255, -255);
-    // move_motors_mm(sw_group_nums[2], 210, 210);
-    // rotate_motors(-89, false);
-    // move_motors_mm(sw_group_nums[2], -430, -430);
-    // rotate_motors(90, false);
-    // move_motors_mm(sw_group_nums[2], -260, -260);
+    rotate_motors(90, false);
 
-    //brkicev predlog
-    // |
-    // |
-    // V
-    /*
-    move_motors_mm(sw_group_nums[2],-160, -160);
-    move_motors_mm(sw_group_nums[2],30, 30);
-    rotate_motors(80,false);
-    move_motors_mm(sw_group_nums[2],-450, -450);
-   */
+    move_motors_mm(sw_group_nums[2], -370, -370);
 
+    rotate_motors(-5, false);
 
+    move_motors_mm(sw_group_nums[2], 555, 555);
 
-    //ovo je kod za kupljenje pumpom
-    // |
-    // |
-    // V
-    /*
-    //kupljenje dve daske, ostavljanje i guranje crnih i plavih
-    rotate_motors(15, false);
-    move_motors_mm(sw_group_nums[2],160, 160);
-    rotate_motors(-15, false);
-    move_motors_mm(sw_group_nums[2],262, 262);
-    pick_up_bar();
-    rotate_pump(90);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_pump(-90);
-    //razlika u pumpi od pocetne pozicije -18
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2],-50, -50);
-    rotate_motors(-15, true);
-    move_motors_mm(sw_group_nums[2],-65, -65);
-    rotate_motors(15, true);
-    move_motors_mm(sw_group_nums[2],-285, -285);
-    rotate_motors(90, true);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    release_bar();
-    move_motors_mm(sw_group_nums[2], -20, -20);
-    vTaskDelay(500/portTICK_PERIOD_MS);
+    rotate_motors(-85, false);
+
+    move_motors_mm(sw_group_nums[2], 150, 150);
+
+    move_motors_mm(sw_group_nums[2], -270, -270);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -325, -325);
+
     rotate_motors(-90, false);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    //zavrsio ostavljanje prve daske
-    move_motors_mm(sw_group_nums[2],470, 470);
-    pick_up_bar();
-    rotate_pump(90);
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_pump(-90);
-    //razlika u pumpi od pocetne pozicije 0
-    vTaskDelay(1000/portTICK_PERIOD_MS);
-    rotate_motors(15, true);
-    move_motors_mm(sw_group_nums[2],-50, -50);
-    rotate_motors(-15, true);
-    move_motors_mm(sw_group_nums[2],-400, -400);
-    rotate_motors(90, true);
-    release_bar();
-    rotate_motors(-75, false);
-    move_motors_mm(sw_group_nums[2],650, 650);
-    rotate_motors(6.5, false);
-    vTaskDelay(500/portTICK_PERIOD_MS);
-    move_motors_mm(sw_group_nums[2],-610, -610);
-    rotate_motors(-100, false);
-    */
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    starting_pos();
+    //////////////////////////
+
 }
 
 
+void SIMA_N_YELLOW1()
+{
+    //////////////////////////////////////////////
+    /// FIRST PART (first stack with 2 bars) /////
+    //////////////////////////////////////////////
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], -420, -420);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
+
+    move_motors_mm(sw_group_nums[2], -110, -110);
+
+    pick_up_bar(false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -420, -420);
+
+    release_bar();
+
+    //////////////////////////////////////////////
+    /// SECOND PART (first bar second stack) /////
+    //////////////////////////////////////////////
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 420, 420);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -180, -180);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    pick_up_bar(false);
+
+    move_motors_mm(sw_group_nums[2], 150, 150);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -230, -230);
+
+    move_motors_mm(sw_group_nums[2], 40, 40);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -520, -520);
+
+    release_bar();
+
+    //////////////////////////////////////////////
+    /// THIRD PART (second bar second stack) /////
+    //////////////////////////////////////////////
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 420, 420);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -180, -180);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -210, -210);
+
+    pick_up_bar(false);
+
+    move_motors_mm(sw_group_nums[2], 220, 220);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -230, -230);
+
+    move_motors_mm(sw_group_nums[2], 40, 40);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -520, -520);
+
+    release_bar();
+
+    //////////////////////////////////////////////
+    ///// LAST PART (push bars on the table) /////
+    //////////////////////////////////////////////
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -230, -230);
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -440, -440);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -140, -140);
+
+    //////////////////////////////////////////////
+}
+
+
+void SIMA_N_BLUE2()
+{ 
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -175, -175);
+
+    move_motors_mm(sw_group_nums[2], 60, 60);
+
+    rotate_motors(-90, false);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], -120, -120);
+
+    rotate_motors(45, false);
+
+    move_motors_mm(sw_group_nums[2], -80, -80);
+
+    rotate_motors(-5, false);
+
+    move_motors_mm(sw_group_nums[2], -50, -50);
+
+    move_motors_mm(sw_group_nums[2], 15, 15);
+
+    pick_up_bar(true);
+
+    rotate_motors(50, false);
+
+    move_motors_mm(sw_group_nums[2], 300, 300);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(91, false);
+
+    move_motors_mm(sw_group_nums[2], -350, -350);
+
+    // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(-50);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(50, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    //////////////////////////////////////////////////////
+
+    move_motors_mm(sw_group_nums[2], 250, 250);
+
+    rotate_motors(-90, false);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 200, 200);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(-45, false);
+
+    move_motors_mm(sw_group_nums[2], -220, -220);
+
+    rotate_motors(-15, false);
+
+    move_motors_mm(sw_group_nums[2], -20, -20);
+
+    move_motors_mm(sw_group_nums[2], 10, 10);
+
+    pick_up_bar(true);
+
+    rotate_motors(55, false);
+
+    move_motors_mm(sw_group_nums[2], 290, 290);
+
+    move_motors_mm(sw_group_nums[2], -70, -70);
+
+    rotate_motors(87, false);
+
+    move_motors_mm(sw_group_nums[2], -500, -500);
+
+     // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(50);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(-50, false);
+
+    move_motors_mm(sw_group_nums[2], -40, -40);
+
+    move_motors_mm(sw_group_nums[2], 300, 300);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 150, 150);
+
+    move_motors_mm(sw_group_nums[2], -170, -170);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -370, -370);
+
+    rotate_motors(5, false);
+
+    move_motors_mm(sw_group_nums[2], 555, 555);
+
+    rotate_motors(85, false);
+
+    move_motors_mm(sw_group_nums[2], 150, 150);
+
+    move_motors_mm(sw_group_nums[2], -270, -270);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -325, -325);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    starting_pos();
+    //////////////////////////
+
+}
+
+
+void SIMA_N_BLUE1()
+{
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -175, -175);
+
+    move_motors_mm(sw_group_nums[2], 60, 60);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 190, 190);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], -250, -250);
+
+    rotate_motors(45, false);
+
+    move_motors_mm(sw_group_nums[2], -50, -50);
+
+    rotate_motors(-15, false);
+
+    move_motors_mm(sw_group_nums[2], -50, -50);
+
+    move_motors_mm(sw_group_nums[2], 15, 15);
+
+    pick_up_bar(true);
+
+    rotate_motors(65, false);
+
+    move_motors_mm(sw_group_nums[2], 300, 300);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(95, false);
+
+    move_motors_mm(sw_group_nums[2], -350, -350);
+
+    // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(-30);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(30, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    //////////////////////////////////////////////////////
+
+    move_motors_mm(sw_group_nums[2], 250, 250);
+
+    rotate_motors(-90, false);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 200, 200);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(-45, false);
+
+    move_motors_mm(sw_group_nums[2], -220, -220);
+
+    rotate_motors(-10, false);
+
+    move_motors_mm(sw_group_nums[2], -20, -20);
+
+    move_motors_mm(sw_group_nums[2], 15, 15);
+
+    pick_up_bar(true);
+
+    rotate_motors(65, false);
+
+    move_motors_mm(sw_group_nums[2], 290, 290);
+
+    move_motors_mm(sw_group_nums[2], -70, -70);
+
+    rotate_motors(95, false);
+
+    move_motors_mm(sw_group_nums[2], -500, -500);
+
+     // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(30);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(-30, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    //////////////////////////////////////////////////////
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], 380, 380);
+
+    rotate_motors(-90, false);
+
+    prep_pump();
+
+    move_motors_mm(sw_group_nums[2], 230, 230);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], -180, -180);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -270, -270);
+
+    move_motors_mm(sw_group_nums[2], 15, 15);
+
+    pick_up_bar(true);
+
+    move_motors_mm(sw_group_nums[2], 280, 280);
+
+    rotate_motors(100, false);
+
+    move_motors_mm(sw_group_nums[2], 180, 180);
+
+    move_motors_mm(sw_group_nums[2], -80, -80);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -560, -560);
+
+     // back up and rotate to throw the bar 
+    move_motors_mm(sw_group_nums[2], 30, 30);
+
+    profile_vel_sw[0] = MAX_VEL / 3 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_and_release_bar(30);
+
+    profile_vel_sw[0] = MAX_VEL / 5 - 1;
+    profile_vel_sw[1] = MAX_VEL / 5 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    rotate_motors(-30, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+    
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 200, 200);
+
+    move_motors_mm(sw_group_nums[2], -300, -300);
+
+
+
+    //////////////////////////
+
+
+}
+
+void SIMA_N_YELLOW_NO_BARS()
+{
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -175, -175);
+
+    move_motors_mm(sw_group_nums[2], 60, 60);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -120, -120);
+
+    rotate_motors(-45, false);
+
+    move_motors_mm(sw_group_nums[2], -80, -80);
+
+    rotate_motors(45, false);
+
+    move_motors_mm(sw_group_nums[2], -400, -400);
+
+    rotate_motors(-10, false);
+
+    move_motors_mm(sw_group_nums[2], 590, 590);
+
+    rotate_motors(-80, false);
+
+    move_motors_mm(sw_group_nums[2], 180, 180);
+
+    move_motors_mm(sw_group_nums[2], -270, -270);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -330, -330);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    starting_pos();
+
+}
+
+void SIMA_N_BLUE_NO_BARS()
+{
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -130, -130);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 130, 130);
+
+    move_motors_mm(sw_group_nums[2], -175, -175);
+
+    move_motors_mm(sw_group_nums[2], 60, 60);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -120, -120);
+
+    rotate_motors(45, false);
+
+    move_motors_mm(sw_group_nums[2], -80, -80);
+
+    rotate_motors(-45, false);
+
+    move_motors_mm(sw_group_nums[2], -400, -400);
+
+    rotate_motors(10, false);
+
+    move_motors_mm(sw_group_nums[2], 590, 590);
+
+    rotate_motors(80, false);
+
+    move_motors_mm(sw_group_nums[2], 180, 180);
+
+    move_motors_mm(sw_group_nums[2], -270, -270);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -330, -330);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    starting_pos();
+
+}
+
+void SIMA_N_HOMOLOGACIJA()
+{
+    move_motors_mm(sw_group_nums[2], -400, -400);
+}

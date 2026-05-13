@@ -10,4 +10,6 @@ void sensor_init();
 void create_check_sensors_task();
 bool read_sensors();
 
+extern volatile bool state;
+
 #endif
