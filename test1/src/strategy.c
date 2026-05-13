@@ -111,6 +111,9 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
+
+    //move_motors_mm(sw_group_nums[2], 3000, 3000);
+    
     move_motors_mm(sw_group_nums[2], 450, 450);
     rotate_motors(10);
     move_motors_mm(sw_group_nums[2], 100, 100);
@@ -118,6 +121,7 @@ void SIMA_N_YELLOW()
     move_motors_mm(sw_group_nums[2], 1350, 1350);
     rotate_motors(45);
     move_motors_mm(sw_group_nums[2], 400, 400);
+    
     // Za ne agresivnu protiv mini u
     // nakon rotacije za 35
     /*
@@ -136,6 +140,9 @@ void SIMA_N_YELLOW()
 
 void SIMA_N_BLUE()
 {
+
+    move_motors_mm(sw_group_nums[2], 3000, 3000);
+    /*
     move_motors_mm(sw_group_nums[2], 450, 450);
     rotate_motors(-10);
     move_motors_mm(sw_group_nums[2], 100, 100);
@@ -143,6 +150,7 @@ void SIMA_N_BLUE()
     move_motors_mm(sw_group_nums[2], 1350, 1350);
     rotate_motors(-45);
     move_motors_mm(sw_group_nums[2], 400, 400);
+    */
     /*
     profile_vel_sw[0] = 384;
     profile_vel_sw[1] = 384;

@@ -66,8 +66,8 @@ void create_move_servo_task()
                                             NULL,
                                             2,                 
                                             &check_flag_handle,
-                                            1                       // Stavljeno na CORE1 sa tajmerom
-                                            );                      // (izmedju tajmera koji je evenet task je provera)
+                                            1                      // Stavljeno na CORE0 sa tajmerom
+                                            );                      
 
     if (creation_result != pdPASS)
     {
@@ -110,22 +110,31 @@ void shut_motors_off()
 
 void SIMA_N_YELLOW()
 {
+    //move_motors_mm(sw_group_nums[2], 3000, 3000);
+
+    
     move_motors_mm(sw_group_nums[2], 550, 550);
     rotate_motors(37);
     move_motors_mm(sw_group_nums[2], 869, 869); // bilo 1000
     rotate_motors(-37);
     vTaskDelete(check_sensors_handle);
     move_motors_mm(sw_group_nums[2], 362, 362);
+    
 }
 
 void SIMA_N_BLUE()
 {
+    move_motors_mm(sw_group_nums[2], 3000, 3000);
+
+    /*
     move_motors_mm(sw_group_nums[2], 550, 550);
     rotate_motors(-37);
     move_motors_mm(sw_group_nums[2], 869, 869);
     rotate_motors(37);
     vTaskDelete(check_sensors_handle);
     move_motors_mm(sw_group_nums[2], 362, 362);
+    */
+    
 }
 
 

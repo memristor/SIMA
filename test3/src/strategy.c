@@ -66,7 +66,7 @@ void create_move_servo_task()
                                             2,                 
                                             &check_flag_handle,
                                             1                       // Stavljeno na CORE1 sa tajmerom
-                                            );                      // (izmedju tajmera koji je evenet task je provera)
+                                            );                      
 
     if (creation_result != pdPASS)
     {
@@ -110,6 +110,9 @@ void shut_motors_off()
 void
  SIMA_N_YELLOW()
 {
+    //move_motors_mm(sw_group_nums[2], -3000, -3000);
+
+    
     move_motors_mm(sw_group_nums[2], -600, -600);
     rotate_motors(59);
     move_motors_mm(sw_group_nums[2], -583.1, -583.1);
@@ -122,13 +125,18 @@ void
     //move_motors_mm(sw_group_nums[2], -100, -100);
     //rotate_motors(90);
     //move_motors_mm(sw_group_nums[2], -170, -170);
+    
 }
 
 void SIMA_N_BLUE()
 {
+    move_motors_mm(sw_group_nums[2], -3000, -3000);
+
+    /*
     move_motors_mm(sw_group_nums[2], -600, -600);
     rotate_motors(-59);
     move_motors_mm(sw_group_nums[2], -583.1, -583.1);
+    */
     //move_motors_mm(sw_group_nums[2], -350, -350);
     //rotate_motors(-45);
     //move_motors_mm(sw_group_nums[2], -707, -707);
@@ -138,6 +146,7 @@ void SIMA_N_BLUE()
     //move_motors_mm(sw_group_nums[2], -150, -150);
     //rotate_motors(-90);
     //move_motors_mm(sw_group_nums[2], -200, -200);
+    
 }
 
 
