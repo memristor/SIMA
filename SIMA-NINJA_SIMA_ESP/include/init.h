@@ -22,10 +22,9 @@
 #define PROFILE_ACC_ADDR 108
 #define PROFILE_VEL_ADDR 112
 #define GOAL_POS_ADDR 116
+#define MOVING_STATUS_ADDR 123
 #define PRESENT_POS_ADDR 132
-
-#define MAX_VEL 256
-
+#define MAX_VEL 1024 // opseg od 0 - 1023
 #define TAG_INIT "UART_INIT"
 
 typedef enum OperatingMode{
@@ -37,7 +36,7 @@ typedef enum OperatingMode{
   OP_PWM = 16,
 } OperatingMode;
 
-static const uint8_t DXL_ID_LIST[DXL_ID_CNT] = {1, 2};
+static const uint8_t DXL_ID_LIST[DXL_ID_CNT + 1] = {1, 2, 3};
 static const uint8_t dxl_port_num = 2;
 
 extern uint32_t profile_acc_sw[DXL_ID_CNT];
