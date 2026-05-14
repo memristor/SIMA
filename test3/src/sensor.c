@@ -9,6 +9,7 @@ TaskHandle_t check_sensors_handle;
 uint32_t remaining[2] = {0, 0};
 
 bool state = false;
+uint16_t sensors_active = 0;
 
 void check_sensors_task(void *pvParams)
 {
@@ -25,17 +26,20 @@ void check_sensors_task(void *pvParams)
         else if (read_sensors() == true && state == false)
         {
             //read_position(group_num_sr, present_pos_read);
-            sync_write_gposition(sw_group_nums[2], present_pos_read);
+            if (++sensors_active > 20)
+            {
+                sync_write_gposition(sw_group_nums[2], present_pos_read);
 
-            profile_vel_sw[0] = MIN_VEL_ACC;
-            profile_vel_sw[1] = MIN_VEL_ACC;
+                profile_vel_sw[0] = MIN_VEL_ACC;
+                profile_vel_sw[1] = MIN_VEL_ACC;
 
-            sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+                sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-            remaining[0] = goal_pos_sw[0] - present_pos_read[0];
-            remaining[1] = goal_pos_sw[1] - present_pos_read[1];
+                remaining[0] = goal_pos_sw[0] - present_pos_read[0];
+                remaining[1] = goal_pos_sw[1] - present_pos_read[1];
 
-            state = true;
+                state = true;
+            }
         }
         else if (read_sensors() == false && state == true)
         {
@@ -50,6 +54,7 @@ void check_sensors_task(void *pvParams)
             sync_write_gposition(sw_group_nums[2], goal_pos_sw);
 
             state = false;
+            sensors_active = 0;
         }
     }
 }

@@ -4,7 +4,8 @@
 #include "driver/ledc.h"
 
 #define SERVO_PIN GPIO_NUM_27
-#define SERVO_DUTY 2458
+#define STARTING_SERVO_DUTY 1300
+#define SERVO_DUTY 2450
 #define SERVO_FREQ 50 // Hz
 #define CYCLE_STEP 14
 #define TOTAL_CYCLES 60

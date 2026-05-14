@@ -6,8 +6,8 @@
 
 #define TIMER_TAG "TIMER.H"
 
-#define DISABLED_TIME_uS 0//89000000
-#define RUN_TIME_uS 99000000//10500000
+#define DISABLED_TIME_uS 89000000//89000000 //0
+#define RUN_TIME_uS 10500000 //99000000
 
 volatile bool end_flag = false;
 bool start_flag = false;

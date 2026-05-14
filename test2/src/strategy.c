@@ -66,7 +66,7 @@ void create_move_servo_task()
                                             NULL,
                                             2,                 
                                             &check_flag_handle,
-                                            1                      // Stavljeno na CORE0 sa tajmerom
+                                            1                      
                                             );                      
 
     if (creation_result != pdPASS)
@@ -115,25 +115,31 @@ void SIMA_N_YELLOW()
     
     move_motors_mm(sw_group_nums[2], 550, 550);
     rotate_motors(37);
-    move_motors_mm(sw_group_nums[2], 869, 869); // bilo 1000
+    move_motors_mm(sw_group_nums[2], 879, 879); // bilo 1000
     rotate_motors(-37);
-    vTaskDelete(check_sensors_handle);
+    //vTaskDelete(check_sensors_handle);
+    profile_vel_sw[0] = 500;
+    profile_vel_sw[1] = 500;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
     move_motors_mm(sw_group_nums[2], 362, 362);
     
 }
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], 3000, 3000);
+    //move_motors_mm(sw_group_nums[2], 3000, 3000);
 
-    /*
+    
     move_motors_mm(sw_group_nums[2], 550, 550);
     rotate_motors(-37);
-    move_motors_mm(sw_group_nums[2], 869, 869);
+    move_motors_mm(sw_group_nums[2], 879, 879);
     rotate_motors(37);
-    vTaskDelete(check_sensors_handle);
+    //vTaskDelete(check_sensors_handle);
+    profile_vel_sw[0] = 500;
+    profile_vel_sw[1] = 500;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
     move_motors_mm(sw_group_nums[2], 362, 362);
-    */
+    
     
 }
 

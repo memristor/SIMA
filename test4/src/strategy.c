@@ -118,9 +118,9 @@ void SIMA_N_YELLOW()
 
 void SIMA_N_BLUE()
 {
-    move_motors_mm(sw_group_nums[2], -3000, -3000);
+    //move_motors_mm(sw_group_nums[2], -3000, -3000);
 
-    //move_motors_mm(sw_group_nums[2], -1020, -1020);
+    move_motors_mm(sw_group_nums[2], -1020, -1020);
 }
 
 

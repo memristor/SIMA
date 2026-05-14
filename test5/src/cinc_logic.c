@@ -39,7 +39,7 @@ void check_led()
         
         strat = gpio_get_level(STRAT_PIN);
 
-        if (strat)
+        if (!strat)
             flash_blue();
         else
             flash_yellow();
@@ -48,7 +48,7 @@ void check_led()
     {
         strat = gpio_get_level(STRAT_PIN);
 
-        if (strat)
+        if (!strat)
         {
             gpio_set_level(BLUE_PIN, true);
             gpio_set_level(YELLOW_PIN, false);

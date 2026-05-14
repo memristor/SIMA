@@ -7,8 +7,9 @@
 
 #define TIMER_TAG "TIMER.H"
 
-#define DISABLED_TIME_uS 85000000//87000000  // ako bude dalja 86000000
-#define RUN_TIME_uS 99000000//12500000    // ako bude dalja ima sekundu vise, 12500000
+#define DISABLED_TIME_uS 86000000//87000000  // ako bude dalja 86000000
+#define RUN_TIME_uS 13500000//12500000    // ako bude dalja ima sekundu vise, 12500000 ???
+
 
 volatile bool end_flag = false;
 bool start_flag = false;
