@@ -1,14 +1,13 @@
 #include "sensor.h"
 #include "cinc_logic.h"
 #include "motor_logic.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 TaskHandle_t check_sensors_handle;
 
 uint32_t remaining[2] = {0, 0};
 
-bool state = false;
+volatile bool state = false;
+volatile bool disable_sensors = false;
 
 void check_sensors_task(void *pvParams)
 {
@@ -24,7 +23,7 @@ void check_sensors_task(void *pvParams)
             vTaskDelete(NULL);
         else if (read_sensors() == true && state == false)
         {
-            //read_position(group_num_sr, present_pos_read)
+            //read_position(group_num_sr, present_pos_read);
             sync_write_gposition(sw_group_nums[2], present_pos_read);
 
             profile_vel_sw[0] = MIN_VEL_ACC;
@@ -74,7 +73,7 @@ void create_check_sensors_task()
                                             NULL,
                                             2,                 
                                             &check_sensors_handle,
-                                            0                       
+                                            0                       // Stavljeno na CORE0 sa tajmerom
                                             );                     
 
     if (creation_result != pdPASS)
@@ -87,7 +86,14 @@ void create_check_sensors_task()
     }
 }
 
+
+
 bool read_sensors()
 {
-    return gpio_get_level(SENS1) || gpio_get_level(SENS2);
+    if(disable_sensors){
+        return false;
+    } else {
+        return gpio_get_level(SENS1) || gpio_get_level(SENS2);
+    }
+    
 }

@@ -24,7 +24,7 @@ void setup_servo()
         .intr_type = LEDC_INTR_DISABLE,
         .channel = LEDC_CHANNEL_0,
         .timer_sel = LEDC_TIMER_0,
-        .duty = SERVO_DUTY,
+        .duty = STARTING_SERVO_DUTY,
         .hpoint = 0
     };
 

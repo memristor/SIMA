@@ -6,6 +6,8 @@ bool prev_cinc = false;
 bool cinc      = false;
 bool strat     = false;
 
+strategy_t strategy = NO_BARS_SAFE; // HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4
+
 void init_strat()
 {
     gpio_reset_pin(YELLOW_PIN);
@@ -22,7 +24,6 @@ void init_strat()
     gpio_input_enable(CINC_PIN);
     gpio_input_enable(STRAT_PIN);
 
-    //gpio_pullup_dis(CINC_PIN);
 
     gpio_set_pull_mode(STRAT_PIN, GPIO_PULLUP_ONLY);
     gpio_pullup_en(STRAT_PIN);
@@ -67,11 +68,56 @@ void check_strat()
 
     if (strat)
     {
-            SIMA_N_BLUE();
+        switch(strategy){
+            case HOMOLOGACIJA:
+                SIMA_N_HOMOLOGACIJA();
+                break;
+            case TEST_ROTATION:
+                SIMA_N_TEST_ROTATION();
+                break;
+            case NO_BARS_SAFE:
+                SIMA_N_BLUE_NO_BARS_SAFE();
+                break;
+            case NO_BARS_SAFE_PUSH_FIRST:
+                SIMA_N_BLUE_NO_BARS_SAFE_PUSH_FIRST();
+                break;
+            case NO_BARS_AGR:
+                SIMA_N_BLUE_NO_BARS_AGRESSIVE();
+                break;
+            case BARS_2:
+                SIMA_N_BLUE2();
+                break;
+            case BARS_4:
+                SIMA_N_BLUE4();
+                break;
+        }
     }
     else 
     {
-            SIMA_N_YELLOW();
+        switch(strategy){
+            case HOMOLOGACIJA:
+                SIMA_N_HOMOLOGACIJA();
+                break;
+            case TEST_ROTATION:
+                SIMA_N_TEST_ROTATION();
+                break;
+            case NO_BARS_SAFE:
+                SIMA_N_YELLOW_NO_BARS_SAFE();
+                break;
+            case NO_BARS_SAFE_PUSH_FIRST:
+                SIMA_N_YELLOW_NO_BARS_SAFE_PUSH_FIRST();
+                break;
+            case NO_BARS_AGR:
+                SIMA_N_YELLOW_NO_BARS_AGRESSIVE();
+                break;
+            
+            case BARS_2:
+                SIMA_N_YELLOW2();
+                break;
+            case BARS_4:
+                SIMA_N_YELLOW4();
+                break;
+        }
     }
 }
 

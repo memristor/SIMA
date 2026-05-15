@@ -3,6 +3,7 @@
 
 #include "esp_timer.h"
 #include "esp_log.h"
+#include "debug.h"
 
 #define TIMER_TAG "TIMER.H"
 
@@ -19,13 +20,13 @@ void IRAM_ATTR timer_call(void *arg)
 {
     if (start_flag == false)
     {
-        printf("Endflag timer started\n");
+        print("End flag timer started\n");
         esp_timer_start_once(end_timer, RUN_TIME_uS);
         start_flag = true;
     }
     else
     {
-        printf("Endflag = true\n");
+        print("End flag set to true\n");
         end_flag = true; 
     }                               
 }

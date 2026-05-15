@@ -2,12 +2,6 @@
 #include "motor_logic.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "math.h"
-
-#define WHEEL_DIAMETER_1_mm 55.25
-#define WHEEL_DIAMETER_2_mm 55.25
-#define WHEELS_DISTANCE_mm 145.8
-#define WHEELS_DISTANCE_PUMP 192
 
 const double TICKS_PER_MM_1 = 4095.0 / (M_PI * WHEEL_DIAMETER_1_mm);
 const double TICKS_PER_MM_2 = 4095.0 / (M_PI * WHEEL_DIAMETER_2_mm);
@@ -19,7 +13,7 @@ void setupMotors()
 {
     uint8_t motor_count = 0;
 
-    for (uint8_t i = 0; i < DXL_ID_CNT; i++)
+    for (uint8_t i = 0; i < DXL_ID_CNT + 1; i++)
     {
         ping(dxl_port_num, DXL_PROTOCOL, DXL_ID_LIST[i]);
         if (packetData[dxl_port_num].communication_result == COMM_SUCCESS)
@@ -29,7 +23,7 @@ void setupMotors()
         }
     }
     printf("Motor count: %d\n", motor_count);
-    if (motor_count == DXL_ID_CNT)
+    if (motor_count == DXL_ID_CNT + 1)
     
         printf("Motor connection established!\n");
     else
@@ -37,6 +31,11 @@ void setupMotors()
         printf("Failed to connect to motors.\n");
         while (1);
     }
+
+    // disable torque to change op mode
+    set_torque_enable(dxl_port_num, MOTOR_1_ID, 0);
+    set_torque_enable(dxl_port_num, MOTOR_2_ID, 0);
+    set_torque_enable(dxl_port_num, MOTOR_3_ID, 0);
 
     // Set operating mode for motor 1
     set_operating_mode(dxl_port_num, MOTOR_1_ID, OP_EXTENDED_POSITION);
@@ -46,6 +45,18 @@ void setupMotors()
 
     // Pumpa 3 mod
     set_operating_mode(dxl_port_num, MOTOR_3_ID, OP_POSITION);
+
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+    profile_acc_sw[0] = MAX_VEL / 8 - 1;
+    profile_acc_sw[1] = MAX_VEL / 8 - 1;
+    sync_write_velocity(sw_group_nums[0], profile_acc_sw);
+
+    // enable torque back on
+    set_torque_enable(dxl_port_num, MOTOR_1_ID, 1);
+    set_torque_enable(dxl_port_num, MOTOR_2_ID, 1);
+    set_torque_enable(dxl_port_num, MOTOR_3_ID, 1);
     
     printf("Motors set to Extended Position Control Mode.\n");
 }
@@ -251,24 +262,61 @@ void set_goal_position(int port_num, uint8_t id, uint32_t goal_position)
 
 void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
 {
+
     uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM_1);
     uint32_t offset2 = (uint32_t) (mm2 * TICKS_PER_MM_2);
 
     printf("Offset 1: %ld\n", offset1);
     printf("Offset 2: %ld\n", offset2);
-    /*
-    if (!is_rotate)
-    {
-        profile_vel_sw[0] = MAX_VEL / 2;
-        profile_vel_sw[1] = MAX_VEL / 2;
-        sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-        profile_acc_sw[0] = MAX_VEL / 16;
-        profile_acc_sw[1] = MAX_VEL / 16;
-        sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-    }
-    else
-        is_rotate = 0;
-    */
+
+    read_position(group_num_sr, present_pos_read);
+
+    goal_pos_sw[0] = present_pos_read[0] - offset1;
+    goal_pos_sw[1] = present_pos_read[1] + offset2;
+
+    sync_write_gposition(gpos_group_sw_num, goal_pos_sw);
+
+    uint32_t last_pos[2] = {0, 0};  
+    TickType_t last_moved_time = xTaskGetTickCount();
+    uint8_t tolerance = 20;
+    const TickType_t pos_timeout = pdMS_TO_TICKS(1000);
+
+    do {
+        if (!read_position(group_num_sr, present_pos_read)) {
+            continue;
+        }
+
+        bool position_changed = 
+            (abs((int)(present_pos_read[0] - last_pos[0])) > tolerance) ||
+            (abs((int)(present_pos_read[1] - last_pos[1])) > tolerance);
+
+        if (position_changed) {
+            last_pos[0] = present_pos_read[0];
+            last_pos[1] = present_pos_read[1];
+            last_moved_time = xTaskGetTickCount();
+        } else {
+            if ((xTaskGetTickCount() - last_moved_time) >= pos_timeout) {
+                break;
+            }
+        }
+
+        vTaskDelay(15 / portTICK_PERIOD_MS);
+    } while (
+        abs((int)(goal_pos_sw[0] - present_pos_read[0])) > 20 ||
+        abs((int)(goal_pos_sw[1] - present_pos_read[1])) > 20
+    );
+
+    // Deo koji proverava kraj kretanja stavljen unutar stop_motors_end task-a u strategy.h
+}
+
+void move_while_dropping_bar(int gpos_group_sw_num, double mm1, double mm2)
+{
+
+    uint32_t offset1 = (uint32_t) (mm1 * TICKS_PER_MM_1);
+    uint32_t offset2 = (uint32_t) (mm2 * TICKS_PER_MM_2);
+
+    printf("Offset 1: %ld\n", offset1);
+    printf("Offset 2: %ld\n", offset2);
 
     read_position(group_num_sr, present_pos_read);
 
@@ -281,37 +329,25 @@ void move_motors_mm(int gpos_group_sw_num, double mm1, double mm2)
     {
         if (!read_position(group_num_sr, present_pos_read))
             continue;
-        vTaskDelay(20 / portTICK_PERIOD_MS);
-    } while (abs(goal_pos_sw[0] - present_pos_read[0]) > 20 || abs(goal_pos_sw[1] - present_pos_read[1]) > 20);
+        vTaskDelay(15 / portTICK_PERIOD_MS);
+    } while (
+    abs((int)(goal_pos_sw[0] - present_pos_read[0])) > goal_pos_sw[0] / 2  ||
+    abs((int)(goal_pos_sw[1] - present_pos_read[1])) > goal_pos_sw[1] / 2); // move half of the movement
 
-    // Deo koji proverava kraj kretanja stavljen unutar stop_motors_end task-a u strategy.h
-      
+    release_bar();
 }
 
 void rotate_motors(double angle_deg, bool is_pump)
 {
-    double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);
-
-    if (is_pump)
-        arc_mm = WHEELS_DISTANCE_PUMP * (angle_deg * M_PI / 360);
-
-    is_rotate = 1;
-
-    profile_vel_sw[0] = MAX_VEL / 4;
-    profile_vel_sw[1] = MAX_VEL / 4;
-    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
-    profile_acc_sw[0] = MAX_VEL / 16;
-    profile_acc_sw[1] = MAX_VEL / 16;
-    sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
-    
+    double arc_mm = WHEELS_DISTANCE_mm * (angle_deg * M_PI / 360);    
 
     move_motors_mm(sw_group_nums[2], arc_mm, -arc_mm);
 }
 
 void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_num)
 {
-    profile_vel_sw[0] = MAX_VEL;
-    profile_vel_sw[1] = MAX_VEL;
+    profile_vel_sw[0] = -MAX_VEL;
+    profile_vel_sw[1] =  MAX_VEL;
 
     sync_write_velocity(vel_group_sw_num, profile_vel_sw);
 
@@ -326,7 +362,7 @@ void reset_motors(int vel_group_sw_num, int gpos_group_sw_num, int pos_group_sr_
             continue;
         if ((goal_pos_sw[0] - present_pos_read[0]) <= 20 && (goal_pos_sw[1] - present_pos_read[1]) <= 20)
             break;
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(15 / portTICK_PERIOD_MS);
     }
 
     printf("Motors reset success!\n");
@@ -366,4 +402,28 @@ uint32_t read_profile_gposition(int port_num, uint8_t id)
     rec_data = read4ByteTxRx(port_num, DXL_PROTOCOL, id, GOAL_POS_ADDR);
 
     return rec_data;
+}
+
+uint32_t read_present_position(int port_num, uint8_t id)
+{
+    uint32_t rec_data;
+
+    rec_data = read4ByteTxRx(port_num, DXL_PROTOCOL, id, PRESENT_POS_ADDR);
+
+    return rec_data;
+}
+
+bool read_moving_status(int port_num, uint8_t id, uint8_t *out_status)
+{
+    *out_status = read1ByteTxRx(port_num, DXL_PROTOCOL, id, MOVING_STATUS_ADDR);
+
+    int result = getLastTxRxResult(port_num, DXL_PROTOCOL);
+
+    if (result != COMM_SUCCESS)
+    {
+        printf("Error: %s\n", getTxRxResult(DXL_PROTOCOL, result));
+        return false;
+    }
+
+    return true;
 }

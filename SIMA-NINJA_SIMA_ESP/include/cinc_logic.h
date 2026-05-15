@@ -12,6 +12,10 @@ extern bool prev_cinc;
 extern bool cinc;
 extern bool strat;
 
+typedef enum {HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4} strategy_t;
+
+extern strategy_t strategy;
+
 void init_strat();
 void check_led();
 void check_strat();
