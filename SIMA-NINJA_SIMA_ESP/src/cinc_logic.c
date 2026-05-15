@@ -6,7 +6,7 @@ bool prev_cinc = false;
 bool cinc      = false;
 bool strat     = false;
 
-strategy_t strategy = NO_BARS_SAFE; // HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4
+strategy_t strategy = BARS_2; // HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4
 
 void init_strat()
 {
