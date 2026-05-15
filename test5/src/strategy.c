@@ -122,7 +122,7 @@ void SIMA_N_YELLOW()
     rotate_motors(-45);
     move_motors_mm(sw_group_nums[2], 182.32, 182.32);
     rotate_motors(45);
-    move_motors_mm(sw_group_nums[2], 10, 10);
+    move_motors_mm(sw_group_nums[2], 20, 20);
     
 
     // izgurivanje protivniku uz platformu
@@ -146,11 +146,11 @@ void SIMA_N_BLUE()
     rotate_motors(-48.81);
     move_motors_mm(sw_group_nums[2], 532.1, 532.1);
     rotate_motors(-42.19);
-    move_motors_mm(sw_group_nums[2], 650, 650);
+    move_motors_mm(sw_group_nums[2], 610, 610);
     rotate_motors(45);
     move_motors_mm(sw_group_nums[2], 182.32, 182.32);
     rotate_motors(-45);
-    move_motors_mm(sw_group_nums[2], 10, 10);
+    move_motors_mm(sw_group_nums[2], 20, 20);
     
     
 
