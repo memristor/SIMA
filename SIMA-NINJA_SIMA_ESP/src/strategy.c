@@ -459,7 +459,7 @@ void SIMA_N_YELLOW_NO_BARS_AGGRESSIVE()
 
     vTaskDelay(5000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -120, -120);
 }
 
 
@@ -547,7 +547,7 @@ void SIMA_N_BLUE_NO_BARS_AGGRESSIVE()
 
     vTaskDelay(5000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -120, -120); // Bilo -100
 }
 
 void SIMA_N_YELLOW_NO_BARS_AGGRESSIVE_TEAMAUTO()
@@ -800,7 +800,7 @@ void SIMA_N_BLUE_NO_BARS_AGGRESSIVE_GRCI()
 
     vTaskDelay(16000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -120, -120); // bilo -100
 
 }
 
@@ -870,7 +870,7 @@ void SIMA_N_YELLOW_NO_BARS_AGGRESSIVE_GRCI()
 
     vTaskDelay(16000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -100, -100);
+    move_motors_mm(sw_group_nums[2], -120, -120); // bilo -100
 
 }
 
@@ -1009,20 +1009,20 @@ void SIMA_N_YELLOW2()
 
     vTaskDelay(12000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], -275, -275); // bilo -260
 
     profile_vel_sw[0] = MAX_VEL - 1;
     profile_vel_sw[1] = MAX_VEL - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
 
-    move_motors_mm(sw_group_nums[2], -60, -60);
+    move_motors_mm(sw_group_nums[2], -60, -60); 
 
     profile_vel_sw[0] = MAX_VEL / 4 - 1;
     profile_vel_sw[1] = MAX_VEL / 4 - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    move_motors_mm(sw_group_nums[2], 300, 300);
+    move_motors_mm(sw_group_nums[2], 335, 335); // bilo 315
 
     move_motors_mm(sw_group_nums[2], -60, -60);
 
@@ -1038,7 +1038,7 @@ void SIMA_N_YELLOW2()
 
     vTaskDelay(15000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -45, -45);
+    move_motors_mm(sw_group_nums[2], -60, -60); // bilo -55
     //////////////////////////
 
 }
@@ -1177,7 +1177,7 @@ void SIMA_N_BLUE2()
 
     vTaskDelay(12000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -260, -260);
+    move_motors_mm(sw_group_nums[2], -275, -275);
 
     profile_vel_sw[0] = MAX_VEL / 2 - 1;
     profile_vel_sw[1] = MAX_VEL / 2 - 1;
@@ -1189,7 +1189,7 @@ void SIMA_N_BLUE2()
     profile_vel_sw[1] = MAX_VEL / 4 - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    move_motors_mm(sw_group_nums[2], 310, 310);
+    move_motors_mm(sw_group_nums[2], 335, 335);
 
     move_motors_mm(sw_group_nums[2], -60, -60);
 
@@ -1205,7 +1205,7 @@ void SIMA_N_BLUE2()
 
     vTaskDelay(15000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -45, -45);
+    move_motors_mm(sw_group_nums[2], -60, -60);
     //////////////////////////
 
 }

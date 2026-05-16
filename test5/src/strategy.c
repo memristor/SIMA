@@ -116,7 +116,7 @@ void SIMA_N_YELLOW()
     
     move_motors_mm(sw_group_nums[2], 250, 250);
     rotate_motors(48.81);
-    move_motors_mm(sw_group_nums[2], 532.1, 532.1);
+    move_motors_mm(sw_group_nums[2], 547.1, 547.1);
     rotate_motors(42.19);
     move_motors_mm(sw_group_nums[2], 610, 610);
     rotate_motors(-45);
@@ -135,14 +135,21 @@ void SIMA_N_YELLOW()
     //move_motors_mm(sw_group_nums[2], 270.16, 270.16);
 
     // cela gde sima 5 gura one od nindze
+    
+    //profile_acc_sw[0] = MAX_VEL_ACC / 4;
+    //profile_acc_sw[1] = MAX_VEL_ACC / 4;
+    //sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+    
     /*
-    move_motors_mm(sw_group_nums[2], 240, 240);
+    move_motors_mm(sw_group_nums[2], 220, 220);
     rotate_motors(90);
     move_motors_mm(sw_group_nums[2], 860, 860);
     move_motors_mm(sw_group_nums[2], -160, -160);
     rotate_motors(-47.49);
     move_motors_mm(sw_group_nums[2], 713.3, 713.3);
     */
+    
+    
 }
 
 void SIMA_N_BLUE()
@@ -153,7 +160,7 @@ void SIMA_N_BLUE()
     
     move_motors_mm(sw_group_nums[2], 250, 250);
     rotate_motors(-48.81);
-    move_motors_mm(sw_group_nums[2], 532.1, 532.1);
+    move_motors_mm(sw_group_nums[2], 547.1, 547.1);
     rotate_motors(-42.19);
     move_motors_mm(sw_group_nums[2], 610, 610);
     rotate_motors(45);
@@ -173,8 +180,13 @@ void SIMA_N_BLUE()
     //move_motors_mm(sw_group_nums[2], 270.16, 270.16);
 
     // cela gde sima 5 gura one od nindze
+    
+    //profile_acc_sw[0] = MAX_VEL_ACC / 4;
+    //profile_acc_sw[1] = MAX_VEL_ACC / 4;
+    //sync_write_acceleration(sw_group_nums[0], profile_acc_sw);
+    
     /*
-    move_motors_mm(sw_group_nums[2], 240, 240);
+    move_motors_mm(sw_group_nums[2], 220, 220);
     rotate_motors(-90);
     move_motors_mm(sw_group_nums[2], 860, 860);
     move_motors_mm(sw_group_nums[2], -160, -160);
