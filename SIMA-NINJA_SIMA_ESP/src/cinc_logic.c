@@ -6,7 +6,10 @@ bool prev_cinc = false;
 bool cinc      = false;
 bool strat     = false;
 
-strategy_t strategy = BARS_2; // HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4
+strategy_t strategy = NO_BARS_AGR_GRCI; // HOMOLOGACIJA, TEST_ROTATION,
+// NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, NO_BARS_AGR_TEAMAUTO, NO_BARS_AGR_GRCI, BARS_2, BARS_4
+
+// TEAMAUTO AGGRESSIVE NIJE DOVRSENO ALI JE BOLJE PUSTITI AGGRESSIVE GRCI JER RADI ISTU STVAR ALI BOLJE
 
 void init_strat()
 {
@@ -82,7 +85,13 @@ void check_strat()
                 SIMA_N_BLUE_NO_BARS_SAFE_PUSH_FIRST();
                 break;
             case NO_BARS_AGR:
-                SIMA_N_BLUE_NO_BARS_AGRESSIVE();
+                SIMA_N_BLUE_NO_BARS_AGGRESSIVE();
+                break;
+            case NO_BARS_AGR_TEAMAUTO:
+                SIMA_N_BLUE_NO_BARS_AGGRESSIVE_TEAMAUTO();
+                break;
+            case NO_BARS_AGR_GRCI:
+                SIMA_N_BLUE_NO_BARS_AGGRESSIVE_GRCI();
                 break;
             case BARS_2:
                 SIMA_N_BLUE2();
@@ -108,9 +117,14 @@ void check_strat()
                 SIMA_N_YELLOW_NO_BARS_SAFE_PUSH_FIRST();
                 break;
             case NO_BARS_AGR:
-                SIMA_N_YELLOW_NO_BARS_AGRESSIVE();
+                SIMA_N_YELLOW_NO_BARS_AGGRESSIVE();
                 break;
-            
+            case NO_BARS_AGR_TEAMAUTO:
+                SIMA_N_YELLOW_NO_BARS_AGGRESSIVE_TEAMAUTO();
+                break;
+            case NO_BARS_AGR_GRCI:
+                SIMA_N_YELLOW_NO_BARS_AGGRESSIVE_GRCI();
+                break;
             case BARS_2:
                 SIMA_N_YELLOW2();
                 break;

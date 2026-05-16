@@ -12,7 +12,9 @@ extern bool prev_cinc;
 extern bool cinc;
 extern bool strat;
 
-typedef enum {HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE, NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, BARS_2, BARS_4} strategy_t;
+typedef enum { HOMOLOGACIJA, TEST_ROTATION, NO_BARS_SAFE,
+     NO_BARS_SAFE_PUSH_FIRST, NO_BARS_AGR, NO_BARS_AGR_TEAMAUTO, NO_BARS_AGR_GRCI, BARS_2, BARS_4
+    } strategy_t;
 
 extern strategy_t strategy;
 
