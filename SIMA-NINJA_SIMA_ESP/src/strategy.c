@@ -294,7 +294,7 @@ void SIMA_N_BLUE_NO_BARS_SAFE()
 
     vTaskDelay(17000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -70, -70);
+    move_motors_mm(sw_group_nums[2], -60, -60);
 
 }
 
@@ -369,104 +369,187 @@ void SIMA_N_YELLOW_NO_BARS_SAFE()
 
     vTaskDelay(17000 / portTICK_PERIOD_MS);
 
-    move_motors_mm(sw_group_nums[2], -70, -70);
+    move_motors_mm(sw_group_nums[2], -60, -60);
 
 }
+
 
 
 void SIMA_N_YELLOW_NO_BARS_AGRESSIVE()
 {
     profile_vel_sw[0] = MAX_VEL - 1;
-    profile_vel_sw[1] = MAX_VEL / 3.2 - 1;
+    profile_vel_sw[1] = MAX_VEL / 3.1  - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    // lift_pump();
+    lift_pump();
 
-    move_motors_mm(sw_group_nums[2], -300, -310);
+    move_motors_mm(sw_group_nums[2], -400, -410);
 
-    profile_vel_sw[0] = MAX_VEL / 2 - 1;
-    profile_vel_sw[1] = MAX_VEL / 2 - 1;
+    profile_vel_sw[0] = MAX_VEL / 2.2 - 1;
+    profile_vel_sw[1] = MAX_VEL / 2.2 - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    move_motors_mm(sw_group_nums[2], -720, -720);
+    move_motors_mm(sw_group_nums[2], -680, -680);
+
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], -110, -150);
+
+    profile_vel_sw[0] = MAX_VEL - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], 130, 200);
 
     profile_vel_sw[0] = MAX_VEL / 4 - 1;
     profile_vel_sw[1] = MAX_VEL / 4 - 1;
     sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    move_motors_mm(sw_group_nums[2], 400, 400);
+    move_motors_mm(sw_group_nums[2], 330, 330);
 
     rotate_motors(-90, false);
 
-    move_motors_mm(sw_group_nums[2], 160, 160);
-
-    move_motors_mm(sw_group_nums[2], -160, -160);
-
-    rotate_motors(-90, false);
-
-    move_motors_mm(sw_group_nums[2], -400, -400);
-
-    move_motors_mm(sw_group_nums[2], 60, 60);
-
-    rotate_motors(90, false);
-
-    move_motors_mm(sw_group_nums[2], 160, 160);
+    move_motors_mm(sw_group_nums[2], 300, 300);
 
     move_motors_mm(sw_group_nums[2], -60, -60);
 
     rotate_motors(-90, false);
 
-    move_motors_mm(sw_group_nums[2], -60, -60);
+    move_motors_mm(sw_group_nums[2], -820, -820);
 
-}
-
-void SIMA_N_BLUE_NO_BARS_AGRESSIVE()
-{
-    lift_pump();
-
-    move_motors_mm(sw_group_nums[2], -130, -130);
+    move_motors_mm(sw_group_nums[2], 100, 100);
 
     rotate_motors(90, false);
 
-    move_motors_mm(sw_group_nums[2], 130, 130);
+    move_motors_mm(sw_group_nums[2], 105, 105);
 
-    move_motors_mm(sw_group_nums[2], -175, -175);
+    move_motors_mm(sw_group_nums[2], -110, -110);
 
-    move_motors_mm(sw_group_nums[2], 60, 60);
+    vTaskDelay(44000 / portTICK_PERIOD_MS);
 
-    rotate_motors(-90, false);
+    move_motors_mm(sw_group_nums[2], -140, -140);
 
-    move_motors_mm(sw_group_nums[2], -120, -120);
+    profile_vel_sw[0] = MAX_VEL / 2 - 1;
+    profile_vel_sw[1] = MAX_VEL / 2 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    rotate_motors(45, false);
+    move_motors_mm(sw_group_nums[2], -70, -70);
 
-    move_motors_mm(sw_group_nums[2], -80, -80);
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
 
-    rotate_motors(-45, false);
+    move_motors_mm(sw_group_nums[2], 340, 340);
 
-    move_motors_mm(sw_group_nums[2], -400, -400);
-
-    rotate_motors(10, false);
-
-    move_motors_mm(sw_group_nums[2], 590, 590);
-
-    rotate_motors(80, false);
-
-    move_motors_mm(sw_group_nums[2], 180, 180);
-
-    move_motors_mm(sw_group_nums[2], -270, -270);
-
-    rotate_motors(-90, false);
-
-    move_motors_mm(sw_group_nums[2], -330, -330);
+    move_motors_mm(sw_group_nums[2], -60, -60);
 
     rotate_motors(90, false);
 
-    move_motors_mm(sw_group_nums[2], -60, -60);
+    move_motors_mm(sw_group_nums[2], -350, -350);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
 
     starting_pos();
 
+    move_motors_mm(sw_group_nums[2], -200, -200);
+
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -100, -100);
 }
+
+
+void SIMA_N_BLUE_NO_BARS_AGRESSIVE()
+{
+    profile_vel_sw[0] = MAX_VEL / 3.1- 1;
+    profile_vel_sw[1] = MAX_VEL - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    lift_pump();
+
+    move_motors_mm(sw_group_nums[2], -410, -400);
+
+    profile_vel_sw[0] = MAX_VEL / 2.2 - 1;
+    profile_vel_sw[1] = MAX_VEL / 2.2 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], -680, -680);
+
+    profile_vel_sw[0] = MAX_VEL - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], -150, -110);
+
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], 200, 130);
+
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], 330, 330);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 300, 300);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], -820, -820);
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], 105, 105);
+
+    move_motors_mm(sw_group_nums[2], -110, -110);
+
+    vTaskDelay(44000 / portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -140, -140);
+
+    profile_vel_sw[0] = MAX_VEL / 2 - 1;
+    profile_vel_sw[1] = MAX_VEL / 2 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], -70, -70);
+
+    profile_vel_sw[0] = MAX_VEL / 4 - 1;
+    profile_vel_sw[1] = MAX_VEL / 4 - 1;
+    sync_write_velocity(sw_group_nums[1], profile_vel_sw);
+
+    move_motors_mm(sw_group_nums[2], 340, 340);
+
+    move_motors_mm(sw_group_nums[2], -60, -60);
+
+    rotate_motors(-90, false);
+
+    move_motors_mm(sw_group_nums[2], -350, -350);
+
+    rotate_motors(90, false);
+
+    move_motors_mm(sw_group_nums[2], 100, 100);
+
+    starting_pos();
+
+    move_motors_mm(sw_group_nums[2], -200, -200);
+
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+
+    move_motors_mm(sw_group_nums[2], -100, -100);
+}
+
 
 
 void SIMA_N_YELLOW2()
